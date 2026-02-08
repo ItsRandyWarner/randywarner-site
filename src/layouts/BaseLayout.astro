@@ -1,4 +1,6 @@
 ---
+import Nav from "../components/Nav.astro";
+
 const { title = "Randy Warner" } = Astro.props;
 ---
 <!doctype html>
@@ -8,6 +10,10 @@ const { title = "Randy Warner" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <Nav />
+
+    <main style="padding: 2rem;">
+      <slot />
+    </main>
   </body>
 </html>
