@@ -3,47 +3,95 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Randy Warner">
-  <section>
-    <h1>Randy Warner</h1>
-    <p>Photography • Writing • Creative experiments</p>
+  <section class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-10">
+    <div class="pointer-events-none absolute inset-0 opacity-60">
+      <div class="absolute -top-24 left-10 h-64 w-64 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+      <div class="absolute -bottom-24 right-10 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl"></div>
+    </div>
 
+    <div class="relative">
+      <p class="text-sm text-white/70">Creative hub</p>
+      <h1 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+        Randy Warner
+      </h1>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+        Photography, writing, and experiments. A clean lobby up front — with a creative lab hiding in the back.
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="/photography"
+          class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10"
+        >
+          View photography
+        </a>
+        <a
+          href="/blog"
+          class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10"
+        >
+          Read writing
+        </a>
+        <a
+          href="/lab"
+          class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10"
+        >
+          Enter the lab
+        </a>
+        <a
+          href="/connect"
+          class="rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-4 py-2 text-sm hover:bg-fuchsia-500/15"
+        >
+          Connect
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-6 md:grid-cols-3">
+    <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+      <h2 class="text-lg font-semibold">Now</h2>
+      <ul class="mt-3 space-y-2 text-sm text-white/75">
+        <li>Building a creative home base.</li>
+        <li>Practicing portraits, street, and low-light concerts.</li>
+        <li>Shipping small experiments consistently.</li>
+      </ul>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+      <h2 class="text-lg font-semibold">Featured</h2>
+      <div class="mt-3 space-y-3 text-sm">
+        <a class="block rounded-xl border border-white/10 bg-black/20 p-4 hover:bg-black/30" href="/photography">
+          <div class="text-white/90 font-medium">Photography</div>
+          <div class="text-white/65">Sets, studies, and experiments.</div>
+        </a>
+        <a class="block rounded-xl border border-white/10 bg-black/20 p-4 hover:bg-black/30" href="/blog">
+          <div class="text-white/90 font-medium">Writing</div>
+          <div class="text-white/65">Thoughts, lessons, and stories.</div>
+        </a>
+        <a class="block rounded-xl border border-white/10 bg-black/20 p-4 hover:bg-black/30" href="/lab">
+          <div class="text-white/90 font-medium">Creative Lab</div>
+          <div class="text-white/65">WIP ideas and weird prototypes.</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+      <h2 class="text-lg font-semibold">Lunch?</h2>
+      <p class="mt-3 text-sm leading-relaxed text-white/75">
+        Want to grab lunch and talk creativity, business, or weird projects?
+      </p>
+      <a
+        href="/connect"
+        class="mt-4 inline-flex items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm hover:bg-cyan-400/15"
+      >
+        Sign up
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12 text-sm text-white/60">
     <p>
-      <a href="/photography">Photography</a> ·
-      <a href="/blog">Writing</a> ·
-      <a href="/lab">Creative Lab</a> ·
-      <a href="/connect">Connect</a>
-    </p>
-  </section>
-
-  <hr />
-
-  <section>
-    <h2>Now</h2>
-    <ul>
-      <li>Building a creative home base on the web.</li>
-      <li>Practicing portraits, street, and low-light concert photography.</li>
-      <li>Writing and shipping small experiments.</li>
-    </ul>
-  </section>
-
-  <hr />
-
-  <section>
-    <h2>Featured</h2>
-    <ul>
-      <li><strong>Photography:</strong> A few sets I’m proud of.</li>
-      <li><strong>Writing:</strong> Thoughts, lessons, and stories.</li>
-      <li><strong>Lab:</strong> Experiments, sketches, and odd ideas.</li>
-    </ul>
-  </section>
-
-  <hr />
-
-  <section>
-    <h2>Lunch?</h2>
-    <p>
-      Want to grab lunch and talk creativity, business, or weird projects?
-      <a href="/connect">Sign up here</a>.
+      Tip: this site will evolve. The lobby stays readable — the lab gets strange.
     </p>
   </section>
 </BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import Nav from "../components/Nav.astro";
 import Analytics from "../components/Analytics.astro";
+import "../styles/global.css";
 
 const { title = "Randy Warner" } = Astro.props;
 ---
@@ -11,10 +12,10 @@ const { title = "Randy Warner" } = Astro.props;
     <title>{title}</title>
     <Analytics />
   </head>
-  <body>
+  <body class="min-h-screen bg-neutral-950 text-neutral-100 antialiased">
     <Nav />
 
-    <main style="padding: 2rem;">
+    <main class="mx-auto w-full max-w-5xl px-6 py-12">
       <slot />
     </main>
   </body>
