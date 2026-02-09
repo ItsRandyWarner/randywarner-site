@@ -1,22 +1,43 @@
 ---
-import Nav from "../components/Nav.astro";
-import Analytics from "../components/Analytics.astro";
-import "../styles/global.css";
+const { title = "Lobby" } = Astro.props;
+const pathname = Astro.url.pathname;
 
-const { title = "Randy Warner" } = Astro.props;
+const nav = [
+  { href: "/", label: "Lobby" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/study", label: "Study" },
+  { href: "/lab", label: "Lab" },
+  { href: "/common-room", label: "Common Room" },
+];
+
+const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <Analytics />
   </head>
-  <body class="min-h-screen bg-neutral-950 text-neutral-100 antialiased">
-    <Nav />
+  <body>
+    <header>
+      <nav aria-label="Primary">
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
 
-    <main class="mx-auto w-full max-w-5xl px-6 py-12">
-      <slot />
-    </main>
+    <slot />
+
+    <footer>
+      <p>Built slowly, with care. Occasionally strange.</p>
+    </footer>
   </body>
 </html>

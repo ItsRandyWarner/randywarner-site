@@ -1,66 +1,74 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const hour = new Date().getHours();
+let timeOfDay = "day";
+
+if (hour >= 5 && hour < 11) timeOfDay = "morning";
+else if (hour >= 11 && hour < 17) timeOfDay = "afternoon";
+else if (hour >= 17 && hour < 21) timeOfDay = "evening";
+else timeOfDay = "late-night";
 ---
-<main>
 
-  <section id="arrival">
-    <p>Hey.</p>
-    <p>I'm glad you're here.</p>
-  </section>
+<BaseLayout title="Lobby">
+  <main data-time={timeOfDay}>
+      
+    <section id="arrival">
+      <p>Hey.</p>
+      <p>I'm glad you're here.</p>
+    </section>
 
-  <section id="orientation">
-    <p>This site holds a lot of things.</p>
-    <p>
-      It's a collection of ideas, images, experiments, and conversations.
-      It's a place to explore what I'm learning, what I'm building, and what I care about.
-    </p>
-    <p>There's no right way to explore. Start wherever you'd like.</p>
-  </section>
+    <section id="orientation">
+      <p>This site holds a lot of things.</p>
+      <p>
+        It's a collection of ideas, images, experiments, and conversations.
+        It's a place to explore what I'm learning, what I'm building, and what I care about.
+      </p>
+      <p>There's no right way to explore. Start wherever you'd like.</p>
+    </section>
 
-  <section id="doors">
-    <article>
-      <h2>Gallery</h2>
-      <p>Things I've captured. Moments, moods, and experiments with light.</p>
-    </article>
+    <section id="doors">
+      <article>
+        <h2>Gallery</h2>
+        <p>Things I've captured. Moments, moods, and experiments with light.</p>
+      </article>
 
-    <article>
-      <h2>Study</h2>
-      <p>Thoughts in progress. Writing as a way to understand things better.</p>
-    </article>
+      <article>
+        <h2>Study</h2>
+        <p>Thoughts in progress. Writing as a way to understand things better.</p>
+      </article>
 
-    <article>
-      <h2>Lab</h2>
-      <p>Experiments, half-finished ideas, and creative detours. Peak curiosity. Some things may wobble.</p>
-    </article>
+      <article>
+        <h2>Lab</h2>
+        <p>Experiments, half-finished ideas, and creative detours. Peak curiosity. Some things may wobble.</p>
+      </article>
 
-    <article>
-      <h2>Common Room</h2>
-      <p>A place to connect, collaborate, and build community. Pull up a chair.</p>
-    </article>
-  </section>
+      <article>
+        <h2>Common Room</h2>
+        <p>A place to connect, collaborate, and build community. Pull up a chair.</p>
+      </article>
+    </section>
 
-  <section id="featured">
-    <p>
-      I'm learning, experimenting, and figuring things out as I go.
-      This space changes when something feels worth sharing.
-    </p>
-  </section>
+    <section id="featured">
+      <p>
+        I'm learning, experimenting, and figuring things out as I go.
+        This space changes when something feels worth sharing.
+      </p>
+    </section>
 
-  <section id="personal">
-    <p>
-      I care about curiosity, creativity, and community.
-      I believe making things and sharing them helps us feel a little less alone.
-    </p>
-  </section>
+    <section id="personal">
+      <p>
+        I care about curiosity, creativity, and community.
+        I believe making things and sharing them helps us feel a little less alone.
+      </p>
+    </section>
 
-  <section id="invitation">
-    <p>
-      If you'd like to stay in touch, you're welcome to!
-      If not, feel free to wander quietly.
-    </p>
-  </section>
+    <section id="invitation">
+      <p>
+        If you'd like to stay in touch, you're welcome to!
+        If not, feel free to wander quietly.
+      </p>
+    </section>
 
-</main>
-
-<footer>
-  <p>Built slowly, with care. Occasionally strange.</p>
-</footer>
+  </main>
+</BaseLayout>
