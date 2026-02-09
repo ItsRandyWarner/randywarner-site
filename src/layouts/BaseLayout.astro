@@ -1,6 +1,16 @@
 ---
+import "../styles/global.css";
+import "../components/Analytics.astro"
+
 const { title = "Lobby" } = Astro.props;
-const pathname = Astro.url.pathname;
+
+const normalizePath = (path) => {
+  if (!path) return "/";
+  const withSlash = path.startsWith("/") ? path : `/${path}`;
+  return withSlash !== "/" ? withSlash.replace(/\/+$/, "") : "/";
+};
+
+const pathname = normalizePath(Astro.url.pathname);
 
 const nav = [
   { href: "/", label: "Lobby" },
@@ -10,8 +20,13 @@ const nav = [
   { href: "/common-room", label: "Common Room" },
 ];
 
-const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+const isActive = (href) => {
+  const target = normalizePath(href);
+  if (target === "/") return pathname === "/";
+  return pathname === target || pathname.startsWith(`${target}/`);
+};
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -20,12 +35,21 @@ const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWit
     <title>{title}</title>
   </head>
   <body>
-    <header>
-      <nav aria-label="Primary">
-        <ul>
+    <header class="border-b">
+      <nav aria-label="Primary" class="max-w-3xl mx-auto px-4 py-3">
+        <ul class="flex gap-4 text-sm">
           {nav.map((item) => (
             <li>
-              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class="
+                  text-gray-700
+                  hover:text-black
+                  aria-[current=page]:font-medium
+                  aria-[current=page]:text-black
+                "
+              >
                 {item.label}
               </a>
             </li>
