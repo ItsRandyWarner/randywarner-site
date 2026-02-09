@@ -4,12 +4,20 @@ import "../components/Analytics.astro"
 
 const { title = "Lobby" } = Astro.props;
 
-const normalizePath = (path) => {
+// time-of-day (site-wide)
+const hour = new Date().getHours();
+let timeOfDay = "day";
+if (hour >= 5 && hour < 11) timeOfDay = "morning";
+else if (hour >= 11 && hour < 17) timeOfDay = "afternoon";
+else if (hour >= 17 && hour < 21) timeOfDay = "evening";
+else timeOfDay = "late-night";
+
+// nav (existing)
+const normalizePath = (path: string): string => {
   if (!path) return "/";
   const withSlash = path.startsWith("/") ? path : `/${path}`;
   return withSlash !== "/" ? withSlash.replace(/\/+$/, "") : "/";
 };
-
 const pathname = normalizePath(Astro.url.pathname);
 
 const nav = [
@@ -20,7 +28,7 @@ const nav = [
   { href: "/common-room", label: "Common Room" },
 ];
 
-const isActive = (href) => {
+const isActive = (href: string): boolean => {
   const target = normalizePath(href);
   if (target === "/") return pathname === "/";
   return pathname === target || pathname.startsWith(`${target}/`);
@@ -34,7 +42,7 @@ const isActive = (href) => {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
   </head>
-  <body>
+  <body data-time={timeOfDay}>
     <header class="border-b">
       <nav aria-label="Primary" class="max-w-3xl mx-auto px-4 py-3">
         <ul class="flex gap-4 text-sm">
