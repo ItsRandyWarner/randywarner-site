@@ -20,7 +20,7 @@ const normalizePath = (path: string): string => {
 };
 const pathname = normalizePath(Astro.url.pathname);
 
-const nav = [
+const nav: { href: string; label: string }[] = [
   { href: "/", label: "Lobby" },
   { href: "/gallery", label: "Gallery" },
   { href: "/study", label: "Study" },
@@ -33,6 +33,16 @@ const isActive = (href: string): boolean => {
   if (target === "/") return pathname === "/";
   return pathname === target || pathname.startsWith(`${target}/`);
 };
+
+// time-of-day whisper (except on study pages)
+const timeWhisper =
+  timeOfDay === "morning" ? "Morning light." :
+  timeOfDay === "afternoon" ? "Afternoon energy." :
+  timeOfDay === "evening" ? "Evening hours." :
+  "Late night vibes.";
+
+const showTimeWhisper = !(pathname === "/study" || pathname.startsWith("/study/"));
+
 ---
 
 <!doctype html>
@@ -68,8 +78,12 @@ const isActive = (href: string): boolean => {
 
     <slot />
 
-    <footer>
-      <p>Built slowly, with care. Occasionally strange.</p>
+    <footer class="max-w-3xl mx-auto px-4 py-10 space-y-2">
+      <p class="text-sm text-gray-700">Built slowly, with care. Occasionally strange.</p>
+
+      {showTimeWhisper && (
+        <p class="text-xs text-gray-500">{timeWhisper}</p>
+      )}
     </footer>
   </body>
 </html>
