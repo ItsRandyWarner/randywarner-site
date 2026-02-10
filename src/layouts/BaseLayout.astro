@@ -26,6 +26,7 @@ const nav: { href: string; label: string }[] = [
   { href: "/study", label: "Study" },
   { href: "/lab", label: "Lab" },
   { href: "/common-room", label: "Common Room" },
+  { href: "/now", label: "Now" },
 ];
 
 const isActive = (href: string): boolean => {
@@ -43,6 +44,10 @@ const timeWhisper =
 
 const showTimeWhisper = !(pathname === "/study" || pathname.startsWith("/study/"));
 
+const isDeepLateNight =
+  timeOfDay === "late-night" && (hour >= 0 && hour < 4);
+
+const lateNightEgg = "Somebody likes to party.";
 
 // seasonal whisper
 const month = new Date().getMonth(); // 0=Jan ... 11=Dec
@@ -116,6 +121,9 @@ const easterEggText = is222
       )}
       {showEasterEgg && (
         <p class="text-[11px] text-gray-400">{easterEggText}</p>
+      )}
+      {isDeepLateNight && showTimeWhisper && (
+        <p class="text-[11px] text-gray-400">{lateNightEgg}</p>
       )}
 
     </footer>

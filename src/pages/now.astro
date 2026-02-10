@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const lastUpdated = new Date("2026-02-09"); // update when you edit
+const daysOld = Math.floor((Date.now() - lastUpdated.getTime()) / 86400000);
+//const isStale = daysOld > 180; // 6 months
+const isStale = true;
+
+---
+
+<BaseLayout title="Now">
+  <main class="max-w-3xl mx-auto px-4 py-10 space-y-6">
+    <h1 class="text-xl font-medium">Now</h1>
+
+    <p class="text-xs text-gray-500">
+      What I'm up to as of {lastUpdated.toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+      {isStale && " · (I hope this note is aging gracefully.)"}
+      {isStale && (
+        <p class="text-xs text-gray-500">
+          If this note feels out of date, you can <a class="underline" href="/ping">ping me</a>.
+        </p>
+      )}
+    </p>
+
+    <p class="text-gray-700 leading-relaxed">
+      This is a small snapshot of where I'm at lately.
+      There's no schedule for updating it; I change it when it no longer feels true.
+    </p>
+
+    <p class="text-gray-700 leading-relaxed">
+      Right now, I'm learning, experimenting, and building this site slowly.
+      I'm trying to let curiosity lead, instead of worrying too much about polish
+      or having everything figured out. That's hard for me! 
+    </p>
+
+    <p class="text-gray-700 leading-relaxed">
+      I've been thinking a lot about creativity and community. Making things
+      and sharing them. 
+      I'm practicing showing up honestly, even when things are unfinished.
+    </p>
+
+    <p class="text-gray-700 leading-relaxed">
+      If you're reading this, thanks for being here.
+      Wherever you are in your own process, I hope you're being gentle with yourself.
+    </p>
+  </main>
+</BaseLayout>
