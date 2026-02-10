@@ -43,6 +43,36 @@ const timeWhisper =
 
 const showTimeWhisper = !(pathname === "/study" || pathname.startsWith("/study/"));
 
+
+// seasonal whisper
+const month = new Date().getMonth(); // 0=Jan ... 11=Dec
+
+const season =
+  (month === 11 || month === 0 || month === 1) ? "winter" :
+  (month >= 2 && month <= 4) ? "spring" :
+  (month >= 5 && month <= 7) ? "summer" :
+  "fall";
+
+const seasonWhisper =
+  season === "winter" ? "Winter air." :
+  season === "spring" ? "Spring energy." :
+  season === "summer" ? "Summer heat." :
+  "Fall drift.";
+
+const presenceWhisper = `${timeWhisper} ${seasonWhisper}`;
+
+// angel number easter egg
+const now = new Date();
+const minutes = now.getMinutes();
+const is222 = hour === 2 && minutes === 22;
+const is1111 = hour === 11 && minutes === 11;
+
+const showEasterEgg = (is222 || is1111) && showTimeWhisper;
+
+const easterEggText = is222
+  ? "psst...2:22. Harmonize your life."
+  : "psst...11:11. Make a wish.";
+
 ---
 
 <!doctype html>
@@ -52,7 +82,7 @@ const showTimeWhisper = !(pathname === "/study" || pathname.startsWith("/study/"
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
   </head>
-  <body data-time={timeOfDay}>
+  <body data-time={timeOfDay} data-season={season}>
     <header class="border-b">
       <nav aria-label="Primary" class="max-w-3xl mx-auto px-4 py-3">
         <ul class="flex gap-4 text-sm">
@@ -82,8 +112,12 @@ const showTimeWhisper = !(pathname === "/study" || pathname.startsWith("/study/"
       <p class="text-sm text-gray-700">Built slowly, with care. Occasionally strange.</p>
 
       {showTimeWhisper && (
-        <p class="text-xs text-gray-500">{timeWhisper}</p>
+        <p class="text-xs text-gray-500">{presenceWhisper}</p>
       )}
+      {showEasterEgg && (
+        <p class="text-[11px] text-gray-400">{easterEggText}</p>
+      )}
+
     </footer>
   </body>
 </html>
