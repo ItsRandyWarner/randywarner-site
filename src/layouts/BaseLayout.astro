@@ -9,7 +9,7 @@ const hour = new Date().getHours();
 let timeOfDay = "day";
 if (hour >= 5 && hour < 11) timeOfDay = "morning";
 else if (hour >= 11 && hour < 17) timeOfDay = "afternoon";
-else if (hour >= 17 && hour < 21) timeOfDay = "evening";
+else if (hour >= 17 && hour < 22) timeOfDay = "evening";
 else timeOfDay = "late-night";
 
 // nav (existing)
@@ -36,8 +36,8 @@ const isActive = (href: string): boolean => {
 
 // time-of-day whisper (except on study pages)
 const timeWhisper =
-  timeOfDay === "morning" ? "Morning light." :
-  timeOfDay === "afternoon" ? "Afternoon energy." :
+  timeOfDay === "morning" ? "Happy you're here early." :
+  timeOfDay === "afternoon" ? "Midday momentum." :
   timeOfDay === "evening" ? "Evening hours." :
   "Late night vibes.";
 
@@ -54,10 +54,10 @@ const season =
   "fall";
 
 const seasonWhisper =
-  season === "winter" ? "Winter air." :
-  season === "spring" ? "Spring energy." :
-  season === "summer" ? "Summer heat." :
-  "Fall drift.";
+  season === "winter" ? " Cold air, clear thoughts." :
+  season === "spring" ? "Fresh cut grass, birds chirpin'." :
+  season === "summer" ? "Drink some water." :
+  "Sweater weather.";
 
 const presenceWhisper = `${timeWhisper} ${seasonWhisper}`;
 
