@@ -1,0 +1,118 @@
+---
+const { titleTokens = [], subtitle = "", cards = [] } = Astro.props as {
+  titleTokens: string[];
+  subtitle?: string;
+  cards: { title: string; imgSrc: string; blurb?: string; href?: string }[];
+};
+---
+
+<div class="ransom">
+  {titleTokens.map((t) => <span>{t}</span>)}
+  {subtitle && <small>{subtitle}</small>}
+</div>
+
+<div class="grid">
+  {cards.map((c) => (
+    <a class="card" href={c.href ?? "#"}>
+      <div class="tag">{c.title}</div>
+      <div class="img">
+        <img src={c.imgSrc} alt="" />
+      </div>
+      {c.blurb && <p>{c.blurb}</p>}
+    </a>
+  ))}
+</div>
+
+<style>
+  .ransom{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+    align-items:center;
+    margin: 0 0 18px;
+  }
+  .ransom span{
+    display:inline-block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background:#fff;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    transform: rotate(-1deg);
+  }
+  .ransom span:nth-child(2n){ transform: rotate(2deg); }
+  .ransom span:nth-child(3n){ transform: rotate(-3deg); }
+
+  .ransom small{
+    width:100%;
+    margin-top: 2px;
+    opacity:0.75;
+    font-size: 14px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .card{
+    text-decoration:none;
+    color: var(--ink);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    padding: 16px;
+    min-height: 210px;
+    display:block;
+    transition: transform 140ms ease;
+  }
+  .card:hover{ transform: translateY(-2px); }
+
+  .tag{
+    display:inline-block;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background:#fff;
+    border:1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    font-weight:900;
+    letter-spacing:0.4px;
+    transform: rotate(-1.2deg);
+    margin-bottom: 12px;
+  }
+
+  .img{
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow:hidden;
+    background: rgba(0,0,0,0.04);
+  }
+  .img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    opacity: 0.96;
+  }
+
+  p{
+    margin: 12px 0 0;
+    font-size: 14px;
+    line-height:1.45;
+    opacity:0.82;
+  }
+
+  @media (max-width: 920px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+</style>

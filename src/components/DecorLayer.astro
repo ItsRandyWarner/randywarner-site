@@ -1,0 +1,74 @@
+---
+type DecorItem =
+  | { kind: "tape" | "stamp" | "doodle" | "star"; x: string; y: string; w: string; r?: string; o?: number }
+  | { kind: "image"; src: string; alt?: string; x: string; y: string; w: string; r?: string; o?: number };
+
+const {
+  items = [],
+  density = "normal", // "none" | "light" | "normal" | "heavy"
+} = Astro.props as { items?: DecorItem[]; density?: "none" | "light" | "normal" | "heavy" };
+
+const opacityMap: Record<string, number> = { none: 0, light: 0.6, normal: 0.85, heavy: 1 };
+const layerOpacity = opacityMap[density] ?? 0.85;
+---
+
+{items.length > 0 && density !== "none" && (
+  <div class="decor" style={`opacity:${layerOpacity}`} aria-hidden="true">
+    {items.map((d) => (
+      <div
+        class={`item kind-${d.kind}`}
+        style={`
+          left:${d.x}; top:${d.y}; width:${d.w};
+          transform: translate(-50%, -50%) rotate(${d.r ?? "0deg"});
+          opacity:${d.o ?? 1};
+        `}
+      >
+        {d.kind === "image" ? <img src={d.src} alt={d.alt ?? ""} /> : <span class="shape"></span>}
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .decor{ position:absolute; inset:0; pointer-events:none; z-index:1; }
+  .item{ position:absolute; filter: drop-shadow(0 10px 12px rgba(0,0,0,0.12)); }
+  .item img{ width:100%; height:auto; display:block; }
+
+  .shape{
+    display:block;
+    width:100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.60);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    position:relative;
+    overflow:hidden;
+  }
+  .shape:before{
+    content:"";
+    position:absolute; inset:-40%;
+    background-image: radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+    transform: rotate(12deg);
+    opacity:0.5;
+  }
+
+  .kind-tape .shape{
+    aspect-ratio: 3 / 1;
+    border-radius: 10px;
+    background: rgba(255, 239, 168, 0.78);
+  }
+  .kind-stamp .shape{
+    border-radius: 10px;
+    background: rgba(255,255,255,0.55);
+  }
+  .kind-doodle .shape{
+    border-radius: 999px;
+    background: rgba(255,255,255,0.35);
+  }
+  .kind-star .shape{
+    border-radius: 999px;
+    background: rgba(255, 208, 92, 0.55);
+  }
+</style>

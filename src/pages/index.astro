@@ -1,17 +1,92 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CollageSection from "../components/CollageSection.astro";
+import CollageCardGrid from "../components/CollageCardGrid.astro";
+import MountainFooter from "../components/MountainFooter.astro";
+import { homeSections } from "../data/homeSections";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Home">
+  {homeSections.map((s) => {
+    if (s.type === "hero") {
+      const toneClass =
+        s.paperTone === "cool" ? "tone-cool" : s.paperTone === "neutral" ? "tone-neutral" : "tone-warm";
+
+      return (
+        <CollageSection id={s.id} className={`hero ${toneClass}`} decor={s.decor} decorDensity={s.decorDensity}>
+          <div class="wrap heroInner">
+            <div class="portrait">
+              <img src={s.portraitSrc} alt="Portrait cutout" />
+            </div>
+            <div class="copy">
+              <h1>{s.headline}</h1>
+              {s.subhead && <p>{s.subhead}</p>}
+            </div>
+          </div>
+        </CollageSection>
+      );
+    }
+
+    if (s.type === "cardGrid") {
+      return (
+        <CollageSection id={s.id} decor={s.decor} decorDensity={s.decorDensity}>
+          <div class="wrap">
+            <CollageCardGrid titleTokens={s.titleTokens} subtitle={s.subtitle} cards={s.cards} />
+          </div>
+        </CollageSection>
+      );
+    }
+  })}
+
+  <MountainFooter />
+</BaseLayout>
+
+<style>
+  .hero{
+    padding: 54px 0 44px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tone-warm{ background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.0)), var(--hero-warm); }
+  .tone-cool{ background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.0)), var(--hero-cool); }
+  .tone-neutral{ background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.0)), var(--hero-neutral); }
+
+  .heroInner{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 26px;
+    align-items:center;
+    min-height: 66vh;
+  }
+  .portrait{
+    display:grid;
+    place-items:center;
+  }
+  .portrait img{
+    width: min(420px, 90%);
+    height:auto;
+    display:block;
+    filter: drop-shadow(0 18px 20px rgba(0,0,0,0.20));
+    transform: rotate(-2deg);
+  }
+  .copy{
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    transform: rotate(0.5deg);
+  }
+  .copy h1{
+    margin:0;
+    font-size: clamp(32px, 4.2vw, 54px);
+    white-space: pre-line;
+    line-height:1.06;
+    letter-spacing:-0.8px;
+  }
+  .copy p{ margin:14px 0 0; max-width: 52ch; opacity:0.88; }
+
+  @media (max-width: 920px){
+    .heroInner{ grid-template-columns: 1fr; min-height: unset; }
+    .copy{ transform:none; }
+  }
+</style>

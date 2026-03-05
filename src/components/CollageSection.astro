@@ -1,0 +1,29 @@
+---
+import DecorLayer from "./DecorLayer.astro";
+
+const {
+  id,
+  className = "",
+  decor = [],
+  decorDensity = "normal",
+} = Astro.props;
+---
+
+<section id={id} class={`section ${className}`}>
+  <DecorLayer items={decor} density={decorDensity} />
+  <div class="content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section{
+    position: relative; /* decor anchors here */
+    overflow: clip;
+    padding: 48px 0;
+  }
+  .content{
+    position: relative;
+    z-index: 2; /* above decor */
+  }
+</style>

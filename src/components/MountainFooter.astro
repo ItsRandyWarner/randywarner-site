@@ -1,0 +1,66 @@
+<div class="footerWrap">
+  <div class="mountains" aria-hidden="true">
+    <svg viewBox="0 0 1200 240" preserveAspectRatio="none" width="100%" height="100%">
+      <path d="M0,170 C160,120 220,200 380,160 C520,125 620,210 780,165 C920,125 1020,190 1200,150 L1200,240 L0,240 Z"
+            fill="rgba(255,255,255,0.78)"/>
+      <path d="M0,190 C200,140 300,230 460,185 C640,130 720,230 900,175 C1020,140 1100,190 1200,165 L1200,240 L0,240 Z"
+            fill="rgba(255,255,255,0.52)"/>
+      <path d="M0,210 C220,165 340,245 520,205 C700,165 820,245 1000,200 C1100,175 1140,205 1200,190 L1200,240 L0,240 Z"
+            fill="rgba(255,255,255,0.32)"/>
+      <circle cx="980" cy="78" r="32" fill="rgba(255,239,168,0.85)"/>
+    </svg>
+  </div>
+
+  <footer>
+    <div class="wrap inner">
+      <div>
+        <div class="title">Randy Warner</div>
+        <div class="sub">Built like a collage wall: always changing, always alive.</div>
+      </div>
+      <div class="links">
+        <a href="#">Instagram</a>
+        <a href="#">Email</a>
+        <a href="#">Work with me</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="wrap fine">© {new Date().getFullYear()} — made with curiosity.</div>
+  </footer>
+</div>
+
+<style>
+  .footerWrap{ position:relative; margin-top: 18px; }
+  .mountains{
+    position:absolute;
+    left:0; right:0;
+    top:-86px;
+    height: 120px;
+    pointer-events:none;
+    z-index:2;
+  }
+  footer{
+    position:relative;
+    z-index:1;
+    background: #101010;
+    color: rgba(255,255,255,0.88);
+    padding: 60px 0 34px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .inner{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 18px;
+    align-items:flex-start;
+    justify-content:space-between;
+  }
+  .title{ font-weight:900; font-size:18px; margin-bottom:8px; }
+  .sub{ opacity:0.75; max-width:46ch; }
+  .links{ display:flex; gap:18px; flex-wrap:wrap; }
+  a{
+    color: rgba(255,255,255,0.9);
+    text-decoration:none;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+  }
+  a:hover{ border-bottom-color: rgba(255,255,255,0.55); }
+  .fine{ margin-top:18px; opacity:0.6; font-size:13px; }
+</style>

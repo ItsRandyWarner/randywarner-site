@@ -1,0 +1,17 @@
+<div class="bg" aria-hidden="true"></div>
+
+<style>
+  .bg{
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    /* repeatable pattern + paper base */
+    background:
+      radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px) 0 0 / 22px 22px,
+      linear-gradient(var(--paper), var(--paper));
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+  }
+</style>

@@ -1,0 +1,64 @@
+<header class="menu">
+  <div class="wrap inner">
+    <div class="brand">
+      <div class="badge">✦</div>
+      <div class="name">Randy Warner</div>
+    </div>
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/writing">Writing</a>
+      <a href="/photos">Photography</a>
+      <a href="/connect">Connect</a>
+      <a href="/projects">Projects</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .menu{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    background: var(--menu-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    padding: 14px 0;
+  }
+
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:900; }
+  .badge{
+    width:34px; height:34px; border-radius:10px;
+    background:#fff;
+    border:1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    display:grid; place-items:center;
+    transform: rotate(-2deg);
+  }
+  .name{ letter-spacing:0.2px; }
+
+  .nav a{
+    color: var(--ink);
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-weight: 650;
+    opacity: 0.92;
+  }
+  .nav a:hover{
+    border-color: var(--border);
+    background: rgba(255,255,255,0.65);
+  }
+
+  @media (max-width: 560px){
+    .nav{ display:none; }
+  }
+</style>
