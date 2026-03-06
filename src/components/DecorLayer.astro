@@ -3,18 +3,132 @@ type DecorItem =
   | { kind: "tape" | "stamp" | "doodle" | "star"; x: string; y: string; w: string; r?: string; o?: number }
   | { kind: "image"; src: string; alt?: string; x: string; y: string; w: string; r?: string; o?: number };
 
+type SprinklesConfig = {
+  enabled: boolean;
+  pack: "default" | "halloween";
+  count: number;
+  seed: string;
+};
+
 const {
   items = [],
   density = "normal", // "none" | "light" | "normal" | "heavy"
-} = Astro.props as { items?: DecorItem[]; density?: "none" | "light" | "normal" | "heavy" };
+  sprinkles = undefined,
+} = Astro.props as {
+  items?: DecorItem[];
+  density?: "none" | "light" | "normal" | "heavy";
+  sprinkles?: SprinklesConfig;
+};
 
 const opacityMap: Record<string, number> = { none: 0, light: 0.6, normal: 0.85, heavy: 1 };
 const layerOpacity = opacityMap[density] ?? 0.85;
+
+/**
+ * Sticker packs live in /public so they can be referenced by URL.
+ * Add/replace files whenever you want.
+ */
+const stickerPacks: Record<SprinklesConfig["pack"], string[]> = {
+  default: [
+    "/decor/sticker-ufo.png",
+    "/decor/stickers/star-1.png",
+    "/decor/stickers/heart-1.png",
+    "/decor/stickers/tape-1.png",
+    "/decor/stickers/stamp-1.png",
+    "/decor/stickers/doodle-1.png",
+    "/decor/stickers/bolt-1.png",
+    "/decor/stickers/alien-cat-1.png",
+  ],
+  halloween: [
+    // examples; add actual files when you're ready
+    // "/decor/stickers/bat.png",
+    // "/decor/stickers/ghost.png",
+    "/decor/sticker-ufo.png",
+  ],
+};
+
+// --- deterministic RNG helpers ---
+function hashStringToUint32(str: string): number {
+  // FNV-1a 32-bit
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(seed: number) {
+  return function () {
+    let t = (seed += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function pickBorderPosition(rand: () => number) {
+  // Places items in a "border ring" to reduce covering main content.
+  // Top/bottom bands + left/right bands.
+  const band = rand();
+  const pad = 6; // percent padding from edges
+  const inner = 22; // thickness of border band in %
+
+  if (band < 0.25) {
+    // top band
+    return { x: `${pad + rand() * (100 - pad * 2)}%`, y: `${pad + rand() * inner}%` };
+  } else if (band < 0.5) {
+    // bottom band
+    return { x: `${pad + rand() * (100 - pad * 2)}%`, y: `${100 - pad - rand() * inner}%` };
+  } else if (band < 0.75) {
+    // left band
+    return { x: `${pad + rand() * inner}%`, y: `${pad + rand() * (100 - pad * 2)}%` };
+  } else {
+    // right band
+    return { x: `${100 - pad - rand() * inner}%`, y: `${pad + rand() * (100 - pad * 2)}%` };
+  }
+}
+
+function makeSprinkleItems(cfg?: SprinklesConfig): DecorItem[] {
+  if (!cfg?.enabled) return [];
+  const pack = stickerPacks[cfg.pack] ?? stickerPacks.default;
+  if (!pack.length) return [];
+
+  const seed = hashStringToUint32(cfg.seed);
+  const rand = mulberry32(seed);
+
+  const count = Math.max(0, Math.min(cfg.count ?? 0, 24));
+
+  const out: DecorItem[] = [];
+  for (let i = 0; i < count; i++) {
+    const src = pack[Math.floor(rand() * pack.length)]!;
+    const pos = pickBorderPosition(rand);
+
+    // Smaller than your main decor by default
+    const sizePx = Math.floor(48 + rand() * 64); // 48–112px
+    const rot = Math.floor(-18 + rand() * 36); // -18..+18deg
+    const opacity = 0.55 + rand() * 0.35; // 0.55..0.90
+
+    out.push({
+      kind: "image",
+      src,
+      x: pos.x,
+      y: pos.y,
+      w: `clamp(44px, 6vw, ${sizePx}px)`,
+      r: `${rot}deg`,
+      o: Number(opacity.toFixed(2)),
+    });
+  }
+
+  return out;
+}
+
+const sprinkleItems = makeSprinkleItems(sprinkles);
+const allItems = [...sprinkleItems, ...items];
 ---
 
-{items.length > 0 && density !== "none" && (
+{allItems.length > 0 && density !== "none" && (
   <div class="decor" style={`opacity:${layerOpacity}`} aria-hidden="true">
-    {items.map((d) => (
+    {allItems.map((d) => (
       <div
         class={`item kind-${d.kind}`}
         style={`
