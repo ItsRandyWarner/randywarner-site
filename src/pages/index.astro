@@ -1,6 +1,8 @@
 ---
+import { Image } from "astro:assets";
 import WritingCard from "../components/WritingCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import yasCastArtwork from "../assets/podcasts/the-yas-cast-artwork.jpg";
 import { getPublishedWriting } from "../lib/writing";
 
 const publishedWriting = await getPublishedWriting();
@@ -95,7 +97,15 @@ const paths = [
 			</section>
 
 			<section class="podcast" id="podcast" aria-labelledby="podcast-title">
-				<div class="podcast-mark" aria-hidden="true">YaS</div>
+				<div class="podcast-art">
+					<Image
+						src={yasCastArtwork}
+						alt="The YaS Cast podcast artwork"
+						width={720}
+						height={720}
+						loading="lazy"
+					/>
+				</div>
 				<div class="podcast-copy">
 					<p class="eyebrow">Podcast</p>
 					<h2 id="podcast-title">The YaS Cast</h2>
@@ -106,19 +116,15 @@ const paths = [
 					<div class="podcast-links">
 						<a
 							class="button primary"
-							href="https://feeds.transistor.fm/the-yas-cast-yuba-and-sutter-podcast"
-							target="_blank"
-							rel="noreferrer"
+							href="/podcasts/"
 						>
-							Open RSS feed
+							Visit Podcasts
 						</a>
 						<a
 							class="button secondary"
-							href="https://www.instagram.com/itsrandywarner"
-							target="_blank"
-							rel="noreferrer"
+							href="/podcasts/request/?podcast=the-yas-cast"
 						>
-							Follow updates
+							Send an idea
 						</a>
 					</div>
 				</div>
@@ -495,17 +501,22 @@ const paths = [
 		box-shadow: var(--shadow);
 	}
 
-	.podcast-mark {
+	.podcast-art {
 		display: grid;
 		place-items: center;
-		min-height: 260px;
+		aspect-ratio: 1;
 		border: 3px solid var(--ink);
-		background: var(--red);
-		color: #fff9ec;
-		font-family: Georgia, "Times New Roman", serif;
-		font-size: clamp(4rem, 10vw, 8rem);
-		font-weight: 900;
+		overflow: hidden;
+		background: var(--ink);
+		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.14);
 		transform: rotate(-2deg);
+	}
+
+	.podcast-art img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	.podcast-copy {
