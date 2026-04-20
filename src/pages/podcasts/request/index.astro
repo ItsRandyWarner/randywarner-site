@@ -1,0 +1,381 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Podcast Request | Randy Warner"
+	description="Suggest a guest, suggest a topic, or request to be a guest on The YaS Cast."
+	current="podcast"
+>
+	<main>
+		<section class="hero" aria-labelledby="request-title">
+			<p class="eyebrow">Podcast Request</p>
+			<h1 id="request-title">Send an idea for The YaS Cast.</h1>
+			<p>
+				Suggest a guest, share a topic, or tell me why you would be a good fit for
+				a conversation about Yuba-Sutter and the surrounding area.
+			</p>
+		</section>
+
+		<section class="form-shell" aria-labelledby="form-title">
+			<div class="form-intro">
+				<p class="eyebrow">Start Here</p>
+				<h2 id="form-title">What should I know?</h2>
+				<p>
+					A few useful details are enough. If the idea fits the show, I can follow
+					up from there.
+				</p>
+			</div>
+
+			<form
+				name="podcast-request"
+				method="POST"
+				action="/podcasts/request/thanks/"
+				data-netlify="true"
+				netlify-honeypot="bot-field"
+			>
+				<input type="hidden" name="form-name" value="podcast-request" />
+				<input type="hidden" name="subject" value="Podcast request" data-subject />
+				<p class="hidden-field" aria-hidden="true">
+					<label>Do not fill this out <input name="bot-field" /></label>
+				</p>
+
+				<div class="field-grid">
+					<label>
+						<span>Name</span>
+						<input name="name" autocomplete="name" required />
+					</label>
+
+					<label>
+						<span>Email</span>
+						<input name="email" type="email" autocomplete="email" required />
+					</label>
+				</div>
+
+				<label>
+					<span>Podcast</span>
+					<select name="podcast" data-podcast required>
+						<option value="the-yas-cast">The YaS Cast</option>
+					</select>
+				</label>
+
+				<label>
+					<span>Request Type</span>
+					<select name="request_type" data-request-type required>
+						<option value="guest_suggestion">Suggest a guest</option>
+						<option value="topic_suggestion">Suggest a topic</option>
+						<option value="guest_request">Request to be a guest</option>
+						<option value="other">Other</option>
+					</select>
+				</label>
+
+				<div data-panel="guest_suggestion">
+					<label>
+						<span>Who should I talk to?</span>
+						<input name="suggested_guest" data-required-when="guest_suggestion" />
+					</label>
+
+					<label>
+						<span>Why would they make a good episode?</span>
+						<textarea name="guest_reason" rows="5" data-required-when="guest_suggestion"></textarea>
+					</label>
+				</div>
+
+				<div data-panel="topic_suggestion" hidden>
+					<label>
+						<span>What topic should the show cover?</span>
+						<input name="suggested_topic" data-required-when="topic_suggestion" />
+					</label>
+
+					<label>
+						<span>Why does this topic matter?</span>
+						<textarea name="topic_reason" rows="5" data-required-when="topic_suggestion"></textarea>
+					</label>
+				</div>
+
+				<div data-panel="guest_request" hidden>
+					<label>
+						<span>Tell me about yourself</span>
+						<textarea name="guest_bio" rows="5" data-required-when="guest_request"></textarea>
+					</label>
+
+					<label>
+						<span>What would we talk about?</span>
+						<textarea name="guest_topic" rows="5" data-required-when="guest_request"></textarea>
+					</label>
+
+					<div class="field-grid">
+						<label>
+							<span>Relevant links</span>
+							<input name="links" />
+						</label>
+
+						<label>
+							<span>Availability</span>
+							<input name="availability" />
+						</label>
+					</div>
+				</div>
+
+				<div data-panel="other" hidden>
+					<label>
+						<span>What is this about?</span>
+						<textarea name="other_message" rows="5" data-required-when="other"></textarea>
+					</label>
+				</div>
+
+				<label>
+					<span>Anything else useful?</span>
+					<textarea name="additional_context" rows="4"></textarea>
+				</label>
+
+				<button type="submit">Send request</button>
+			</form>
+		</section>
+	</main>
+</BaseLayout>
+
+<script>
+	const requestType = document.querySelector("[data-request-type]");
+	const podcast = document.querySelector("[data-podcast]");
+	const subject = document.querySelector("[data-subject]");
+	const panels = [...document.querySelectorAll("[data-panel]")];
+	const requiredFields = [...document.querySelectorAll("[data-required-when]")];
+
+	const requestLabels = {
+		guest_suggestion: "Guest suggestion",
+		topic_suggestion: "Topic suggestion",
+		guest_request: "Guest request",
+		other: "Other",
+	};
+
+	const podcastLabels = {
+		"the-yas-cast": "The YaS Cast",
+	};
+
+	function syncFormState() {
+		if (!(requestType instanceof HTMLSelectElement)) return;
+
+		const activeType = requestType.value;
+		const activePodcast =
+			podcast instanceof HTMLSelectElement ? podcast.value : "the-yas-cast";
+
+		panels.forEach((panel) => {
+			if (!(panel instanceof HTMLElement)) return;
+			panel.hidden = panel.dataset.panel !== activeType;
+		});
+
+		requiredFields.forEach((field) => {
+			if (
+				field instanceof HTMLInputElement ||
+				field instanceof HTMLTextAreaElement ||
+				field instanceof HTMLSelectElement
+			) {
+				field.required = field.dataset.requiredWhen === activeType;
+			}
+		});
+
+		if (subject instanceof HTMLInputElement) {
+			subject.value = `Podcast request: ${podcastLabels[activePodcast] ?? activePodcast} - ${
+				requestLabels[activeType] ?? activeType
+			}`;
+		}
+	}
+
+	function applyQueryParams() {
+		const params = new URLSearchParams(window.location.search);
+		const podcastParam = params.get("podcast");
+		const requestTypeParam = params.get("type");
+
+		if (podcast instanceof HTMLSelectElement && podcastParam) {
+			podcast.value = podcastParam;
+		}
+
+		if (requestType instanceof HTMLSelectElement && requestTypeParam) {
+			requestType.value = requestTypeParam;
+		}
+	}
+
+	applyQueryParams();
+	syncFormState();
+	requestType?.addEventListener("change", syncFormState);
+	podcast?.addEventListener("change", syncFormState);
+</script>
+
+<style>
+	main {
+		width: min(1180px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: clamp(42px, 8vw, 96px) 0 72px;
+	}
+
+	.hero {
+		max-width: 880px;
+	}
+
+	.eyebrow {
+		margin: 0 0 14px;
+		font-size: 0.78rem;
+		font-weight: 900;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	h1,
+	h2,
+	p {
+		text-wrap: pretty;
+	}
+
+	h1,
+	h2 {
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		line-height: 1;
+	}
+
+	h1 {
+		max-width: 12ch;
+		font-size: clamp(3.2rem, 7vw, 6.4rem);
+	}
+
+	h2 {
+		font-size: clamp(2rem, 4vw, 3.7rem);
+	}
+
+	.hero p:not(.eyebrow),
+	.form-intro p {
+		font-size: 1.08rem;
+		line-height: 1.65;
+	}
+
+	.hero p:not(.eyebrow) {
+		max-width: 700px;
+		margin: 24px 0 0;
+	}
+
+	.form-shell {
+		display: grid;
+		grid-template-columns: minmax(260px, 0.54fr) minmax(0, 1fr);
+		gap: clamp(24px, 5vw, 64px);
+		align-items: start;
+		margin-top: clamp(48px, 8vw, 92px);
+		padding-top: clamp(34px, 6vw, 64px);
+		border-top: 2px solid var(--ink);
+	}
+
+	.form-intro {
+		position: sticky;
+		top: 104px;
+	}
+
+	.form-intro p {
+		margin: 22px 0 0;
+	}
+
+	form {
+		display: grid;
+		gap: 18px;
+		padding: clamp(20px, 4vw, 34px);
+		border: 3px solid var(--ink);
+		background: #fff9ec;
+		box-shadow: var(--shadow);
+	}
+
+	.field-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	label {
+		display: grid;
+		gap: 7px;
+		font-weight: 850;
+	}
+
+	label span {
+		font-size: 0.92rem;
+	}
+
+	input,
+	select,
+	textarea {
+		width: 100%;
+		border: 2px solid var(--ink);
+		border-radius: 0;
+		background: var(--paper);
+		color: var(--ink);
+		font: inherit;
+		line-height: 1.4;
+	}
+
+	input,
+	select {
+		min-height: 46px;
+		padding: 10px 12px;
+	}
+
+	textarea {
+		min-height: 120px;
+		padding: 11px 12px;
+		resize: vertical;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus {
+		outline: 3px solid rgba(242, 189, 52, 0.72);
+		outline-offset: 2px;
+	}
+
+	button {
+		justify-self: start;
+		min-height: 50px;
+		padding: 12px 18px;
+		border: 2px solid var(--ink);
+		background: var(--red);
+		color: #fff9ec;
+		font: inherit;
+		font-weight: 900;
+		cursor: pointer;
+		transition:
+			transform 160ms ease,
+			box-shadow 160ms ease;
+	}
+
+	button:hover,
+	button:focus-visible {
+		transform: translate(-2px, -2px);
+		box-shadow: 5px 5px 0 var(--ink);
+	}
+
+	.hidden-field {
+		display: none;
+	}
+
+	@media (max-width: 860px) {
+		.form-shell,
+		.field-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.form-intro {
+			position: static;
+		}
+	}
+
+	@media (max-width: 560px) {
+		main {
+			width: min(100% - 24px, 1180px);
+		}
+
+		form {
+			padding: 18px;
+		}
+
+		button {
+			width: 100%;
+		}
+	}
+</style>

@@ -1,43 +1,71 @@
-# Astro Starter Kit: Minimal
+# randywarner-site-3
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Astro site scaffold for the next version of the Randy Warner website.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Planning
 
-## 🚀 Project Structure
+- [Site direction](docs/site-direction.md)
+- [Site architecture](docs/site-architecture.md)
+- [Components](docs/components.md)
+- [Writing system](docs/writing-system.md)
+- [Podcast page](docs/podcast-page.md)
+- [Homepage v1 brief](docs/homepage-v1-brief.md)
+- [Project brief](docs/project-brief.md)
+- [Technical plan](docs/technical-plan.md)
+- [Roadmap](docs/roadmap.md)
+- [Decision log](docs/decision-log.md)
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```text
 /
+├── docs/
 ├── public/
 ├── src/
+│   ├── assets/
+│   │   ├── podcasts/
+│   │   └── writing/
+│   ├── content/
+│   │   └── writing/
+│   │       ├── drafts/
+│   │       └── published/
+│   ├── components/
+│   │   ├── SiteHeader.astro
+│   │   └── WritingCard.astro
+│   ├── layouts/
+│   │   └── BaseLayout.astro
+│   ├── lib/
+│   │   └── writing.ts
 │   └── pages/
-│       └── index.astro
+│       ├── index.astro
+│       ├── podcasts/
+│       │   ├── index.astro
+│       │   └── request/
+│       │       ├── index.astro
+│       │       └── thanks.astro
+│       └── writing/
+│           ├── index.astro
+│           └── [slug].astro
+├── astro.config.mjs
+├── netlify.toml
+├── src/content.config.ts
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Astro exposes pages from `src/pages/`. Optimized source images live in `src/assets/`; files that should be served unchanged can live in `public/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Netlify is configured to run `npm run build` and publish `dist/`.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Commands
 
-## 🧞 Commands
+| Command | Action |
+| :-- | :-- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the local dev server |
+| `npm run build` | Build the production site to `./dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run astro -- --help` | Show Astro CLI help |
 
-All commands are run from the root of the project, from a terminal:
+## Requirements
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Node.js `>=22.12.0`

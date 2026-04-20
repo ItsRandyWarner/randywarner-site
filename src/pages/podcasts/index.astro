@@ -1,0 +1,258 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import yasCastArtwork from "../../assets/podcasts/the-yas-cast-artwork.jpg";
+
+const appleUrl =
+	"https://podcasts.apple.com/us/podcast/the-yas-cast-yuba-and-sutter-podcast/id1730875855";
+const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
+---
+
+<BaseLayout
+	title="Podcasts | Randy Warner"
+	description="Podcasts from Randy Warner, led by The YaS Cast: conversations rooted in Yuba-Sutter, community, stories, humor, and deeper local curiosity."
+	current="podcast"
+>
+	<main>
+		<section class="hero" aria-labelledby="podcasts-title">
+			<div class="hero-copy">
+				<p class="eyebrow">Podcasts</p>
+				<h1 id="podcasts-title">Shows, conversations, and local curiosity.</h1>
+				<p>
+					This is the home for podcast work: starting with The YaS Cast, with room
+					for future shows, produced projects, and guest appearances when they are ready.
+				</p>
+			</div>
+		</section>
+
+		<section class="featured-show" aria-labelledby="yas-title">
+			<div class="show-art">
+				<Image
+					src={yasCastArtwork}
+					alt="The YaS Cast podcast artwork"
+					width={900}
+					height={900}
+					loading="eager"
+				/>
+			</div>
+
+			<div class="show-copy">
+				<p class="eyebrow">Featured Show</p>
+				<h2 id="yas-title">The YaS Cast</h2>
+				<p>
+					A podcast dedicated to the Yuba-Sutter area, featuring interesting people,
+					political figures, and deeper conversations about Yuba-Sutter and the
+					surrounding communities.
+				</p>
+				<p>
+					It is made with local listeners in mind, but the hope is that plenty of
+					episodes are funny, interesting, and useful even if you are listening from
+					somewhere else.
+				</p>
+
+				<div class="listen-links" aria-label="Listen to The YaS Cast">
+					<a class="button primary" href={spotifyUrl} target="_blank" rel="noreferrer">
+						Spotify
+					</a>
+					<a class="button secondary" href={appleUrl} target="_blank" rel="noreferrer">
+						Apple Podcasts
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="request-panel" aria-labelledby="request-title">
+			<div>
+				<p class="eyebrow">Have an idea?</p>
+				<h2 id="request-title">Suggest a guest, suggest a topic, or ask to be on the show.</h2>
+			</div>
+			<div class="request-copy">
+				<p>
+					The best conversations usually start with somebody noticing a person,
+					story, question, or local thread worth following.
+				</p>
+				<a class="button primary" href="/podcasts/request/?podcast=the-yas-cast">
+					Send a podcast request
+				</a>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
+
+<style>
+	main {
+		width: min(1180px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: clamp(42px, 8vw, 96px) 0 72px;
+	}
+
+	.hero {
+		max-width: 920px;
+	}
+
+	.eyebrow {
+		margin: 0 0 14px;
+		font-size: 0.78rem;
+		font-weight: 900;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	h1,
+	h2,
+	p {
+		text-wrap: pretty;
+	}
+
+	h1,
+	h2 {
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		line-height: 1;
+	}
+
+	h1 {
+		font-size: clamp(3.2rem, 7vw, 6.6rem);
+		max-width: 12ch;
+	}
+
+	h2 {
+		font-size: clamp(2.1rem, 4.6vw, 4.4rem);
+	}
+
+	.hero p:not(.eyebrow),
+	.show-copy p,
+	.request-copy p {
+		font-size: 1.08rem;
+		line-height: 1.65;
+	}
+
+	.hero p:not(.eyebrow) {
+		max-width: 700px;
+		margin: 24px 0 0;
+	}
+
+	.featured-show {
+		display: grid;
+		grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1fr);
+		gap: clamp(24px, 5vw, 64px);
+		align-items: center;
+		margin-top: clamp(48px, 8vw, 96px);
+		padding: clamp(24px, 5vw, 56px);
+		border: 3px solid var(--ink);
+		background:
+			linear-gradient(90deg, rgba(255, 249, 236, 0.86), rgba(255, 249, 236, 0.66)),
+			repeating-linear-gradient(90deg, var(--green) 0 18px, var(--blue) 18px 36px);
+		box-shadow: var(--shadow);
+	}
+
+	.show-art {
+		display: grid;
+		place-items: center;
+		aspect-ratio: 1;
+		border: 3px solid var(--ink);
+		overflow: hidden;
+		background: var(--ink);
+		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.14);
+	}
+
+	.show-art img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.show-copy {
+		max-width: 690px;
+	}
+
+	.show-copy p {
+		margin: 22px 0 0;
+	}
+
+	.listen-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 28px;
+	}
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		padding: 12px 18px;
+		border: 2px solid var(--ink);
+		font-weight: 900;
+		text-decoration: none;
+		transition:
+			transform 160ms ease,
+			box-shadow 160ms ease;
+	}
+
+	.button:hover,
+	.button:focus-visible {
+		transform: translate(-2px, -2px);
+		box-shadow: 5px 5px 0 var(--ink);
+	}
+
+	.primary {
+		background: var(--red);
+		color: #fff9ec;
+	}
+
+	.secondary {
+		background: #fff9ec;
+	}
+
+	.request-panel {
+		display: grid;
+		grid-template-columns: minmax(0, 0.95fr) minmax(260px, 0.62fr);
+		gap: clamp(22px, 5vw, 58px);
+		align-items: end;
+		margin-top: clamp(42px, 7vw, 84px);
+		padding-top: clamp(34px, 6vw, 64px);
+		border-top: 2px solid var(--ink);
+	}
+
+	.request-copy p {
+		margin: 0 0 24px;
+	}
+
+	@media (max-width: 860px) {
+		.featured-show,
+		.request-panel {
+			grid-template-columns: 1fr;
+		}
+
+		.show-art {
+			max-width: 520px;
+		}
+	}
+
+	@media (max-width: 560px) {
+		main {
+			width: min(100% - 24px, 1180px);
+		}
+
+		.featured-show {
+			padding: 18px;
+		}
+
+		.listen-links,
+		.request-copy .button {
+			width: 100%;
+		}
+
+		.listen-links {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.button {
+			width: 100%;
+		}
+	}
+</style>

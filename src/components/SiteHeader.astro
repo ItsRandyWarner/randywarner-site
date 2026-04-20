@@ -1,0 +1,100 @@
+---
+type NavItem = {
+	href: string;
+	label: string;
+	id: "home" | "writing" | "podcast";
+};
+
+const { current = "" } = Astro.props as { current?: NavItem["id"] | "" };
+
+const navItems: NavItem[] = [
+	{ href: "/", label: "Home", id: "home" },
+	{ href: "/writing/", label: "Writing", id: "writing" },
+	{ href: "/podcasts/", label: "Podcasts", id: "podcast" },
+];
+---
+
+<header class="site-header" aria-label="Primary navigation">
+	<div class="site-header-inner">
+		<a class="brand" href="/" aria-label="Randy Warner home">RW</a>
+		<nav>
+			{
+				navItems.map((item) => (
+					<a href={item.href} aria-current={current === item.id ? "page" : undefined}>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		width: 100%;
+		border-bottom: 1px solid rgba(32, 23, 19, 0.13);
+		background: rgba(248, 241, 227, 0.78);
+		backdrop-filter: blur(12px);
+	}
+
+	.site-header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		width: min(1180px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: 18px 0;
+	}
+
+	.brand {
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		border: 2px solid var(--ink, #201713);
+		background: var(--yellow, #f2bd34);
+		font-weight: 900;
+		color: inherit;
+		text-decoration: none;
+		box-shadow: 5px 5px 0 var(--ink, #201713);
+	}
+
+	nav {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+
+	nav a {
+		padding: 9px 12px;
+		border: 1px solid var(--border, rgba(32, 23, 19, 0.22));
+		background: rgba(248, 241, 227, 0.78);
+		color: inherit;
+		font-size: 0.9rem;
+		font-weight: 800;
+		text-decoration: none;
+	}
+
+	nav a[aria-current="page"] {
+		background: #fff9ec;
+		box-shadow: 3px 3px 0 rgba(32, 23, 19, 0.16);
+	}
+
+	@media (max-width: 560px) {
+		.site-header-inner {
+			align-items: flex-start;
+			width: min(100% - 24px, 1180px);
+			padding: 12px 0;
+		}
+
+		nav a {
+			padding: 8px 9px;
+			font-size: 0.82rem;
+		}
+	}
+</style>

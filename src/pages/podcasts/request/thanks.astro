@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Podcast Request Sent | Randy Warner"
+	description="Thanks for sending a podcast request for The YaS Cast."
+	current="podcast"
+>
+	<main>
+		<section class="thanks" aria-labelledby="thanks-title">
+			<p class="eyebrow">Sent</p>
+			<h1 id="thanks-title">Thanks for the idea.</h1>
+			<p>
+				I got your podcast request. If it feels like a fit for The YaS Cast, I can
+				follow up from there.
+			</p>
+			<div class="actions">
+				<a class="button primary" href="/podcasts/">Back to podcasts</a>
+				<a class="button secondary" href="/">Home</a>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
+
+<style>
+	main {
+		width: min(900px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: clamp(56px, 10vw, 120px) 0 72px;
+	}
+
+	.thanks {
+		padding: clamp(28px, 6vw, 56px);
+		border: 3px solid var(--ink);
+		background: #fff9ec;
+		box-shadow: var(--shadow);
+	}
+
+	.eyebrow {
+		margin: 0 0 14px;
+		font-size: 0.78rem;
+		font-weight: 900;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(3rem, 7vw, 6rem);
+		line-height: 1;
+		text-wrap: pretty;
+	}
+
+	p {
+		max-width: 640px;
+		margin: 24px 0 0;
+		font-size: 1.1rem;
+		line-height: 1.65;
+		text-wrap: pretty;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 30px;
+	}
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		padding: 12px 18px;
+		border: 2px solid var(--ink);
+		font-weight: 900;
+		text-decoration: none;
+		transition:
+			transform 160ms ease,
+			box-shadow 160ms ease;
+	}
+
+	.button:hover,
+	.button:focus-visible {
+		transform: translate(-2px, -2px);
+		box-shadow: 5px 5px 0 var(--ink);
+	}
+
+	.primary {
+		background: var(--red);
+		color: #fff9ec;
+	}
+
+	.secondary {
+		background: var(--paper);
+	}
+
+	@media (max-width: 560px) {
+		main {
+			width: min(100% - 24px, 900px);
+		}
+
+		.actions {
+			flex-direction: column;
+		}
+
+		.button {
+			width: 100%;
+		}
+	}
+</style>

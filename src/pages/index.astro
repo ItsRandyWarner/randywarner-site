@@ -1,17 +1,646 @@
 ---
+import WritingCard from "../components/WritingCard.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublishedWriting } from "../lib/writing";
 
+const publishedWriting = await getPublishedWriting();
+const homepageWriting = [
+	...publishedWriting.filter((post) => post.data.featured),
+	...publishedWriting.filter((post) => !post.data.featured),
+].slice(0, 3);
+
+const paths = [
+	{
+		label: "Photos",
+		copy: "A future place for images, color, texture, and moments worth keeping.",
+		status: "Later",
+	},
+	{
+		label: "Projects",
+		copy: "Creative experiments, odd ideas, useful things, and whatever keeps tugging at the sleeve.",
+		status: "Emerging",
+	},
+	{
+		label: "Shop",
+		copy: "Eventually, a small shelf for inexpensive creative objects. Quietly secondary on purpose.",
+		status: "Future",
+	},
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+	title="Randy Warner"
+	description="Randy Warner's personal site for writing, The YaS Cast, creative projects, photos, and curious things worth coming back to."
+	current="home"
+>
+	<main id="top">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="hero-copy">
+					<p class="eyebrow">Personal site / creative field notes</p>
+					<h1 id="hero-title">Randy Warner</h1>
+					<p class="intro">
+						A place for writing, stories, spiritual curiosity, health, comedy, and
+						whatever creative thing is asking to be made next.
+					</p>
+					<div class="hero-actions" aria-label="Featured sections">
+						<a class="button primary" href="#writing">Start exploring</a>
+						<a class="button secondary" href="#podcast">Hear The YaS Cast</a>
+					</div>
+				</div>
+
+				<div class="hero-art" aria-hidden="true">
+					<div class="portrait-card">
+						<div class="portrait-frame">
+							<span class="portrait-sun"></span>
+							<span class="portrait-head"></span>
+							<span class="portrait-neck"></span>
+							<span class="portrait-shirt"></span>
+							<span class="portrait-shadow"></span>
+							<span class="portrait-line one"></span>
+							<span class="portrait-line two"></span>
+						</div>
+						<div class="portrait-caption">
+							<span>writing</span>
+							<span>stories</span>
+							<span>curiosity</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section writing-section" id="writing" aria-labelledby="writing-title">
+				<div class="section-heading">
+					<p class="eyebrow">Writing</p>
+					<h2 id="writing-title">Short thoughts, longer essays, and stories from the middle of things.</h2>
+					<p>
+						Notes, essays, stories, and useful little arguments about life,
+						relationships, spirituality, health, stories, and comedy.
+					</p>
+				</div>
+
+				{
+					homepageWriting.length > 0 ? (
+						<div class="writing-grid">
+							{homepageWriting.map((post) => (
+								<WritingCard post={post} />
+							))}
+						</div>
+					) : (
+						<div class="writing-empty">
+							<p>The writing room is open. The first public pieces are still being drafted.</p>
+							<a href="/writing/">Visit writing</a>
+						</div>
+					)
+				}
+			</section>
+
+			<section class="podcast" id="podcast" aria-labelledby="podcast-title">
+				<div class="podcast-mark" aria-hidden="true">YaS</div>
+				<div class="podcast-copy">
+					<p class="eyebrow">Podcast</p>
+					<h2 id="podcast-title">The YaS Cast</h2>
+					<p>
+						A home base for the Yuba and Sutter podcast, with room for conversations,
+						local stories, and the kind of unexpected turns that make a show feel alive.
+					</p>
+					<div class="podcast-links">
+						<a
+							class="button primary"
+							href="https://feeds.transistor.fm/the-yas-cast-yuba-and-sutter-podcast"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Open RSS feed
+						</a>
+						<a
+							class="button secondary"
+							href="https://www.instagram.com/itsrandywarner"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Follow updates
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="section explore-section" id="explore" aria-labelledby="explore-title">
+				<div class="section-heading split">
+					<div>
+						<p class="eyebrow">Explore more</p>
+						<h2 id="explore-title">Not everything needs to be finished before it has a doorway.</h2>
+					</div>
+					<p>
+						These paths are early markers for where the site can grow after the homepage
+						finds its rhythm.
+					</p>
+				</div>
+
+				<div class="path-grid">
+					{
+						paths.map((path) => (
+							<article class="path-card">
+								<span>{path.status}</span>
+								<h3>{path.label}</h3>
+								<p>{path.copy}</p>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="return-note" aria-labelledby="return-title">
+				<div>
+					<p class="eyebrow">Come back around</p>
+					<h2 id="return-title">This place is meant to keep changing.</h2>
+				</div>
+				<p>
+					New writing, podcast updates, photos, projects, and strange little creative
+					threads will collect here over time.
+				</p>
+				<div class="social-links" aria-label="Social links">
+					<a href="https://www.instagram.com/itsrandywarner" target="_blank" rel="noreferrer">Instagram</a>
+					<a href="https://www.facebook.com/RandyJamesWarner/" target="_blank" rel="noreferrer">Facebook</a>
+				</div>
+			</section>
+	</main>
+</BaseLayout>
+
+<style>
+	main {
+		width: min(1180px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: 22px 0 56px;
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+		gap: clamp(28px, 5vw, 68px);
+		align-items: center;
+		min-height: calc(100svh - 92px);
+		padding: 24px 0 54px;
+	}
+
+	.hero-copy {
+		max-width: 680px;
+	}
+
+	.eyebrow {
+		margin: 0 0 14px;
+		font-size: 0.78rem;
+		font-weight: 900;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	h1,
+	h2,
+	h3,
+	p {
+		text-wrap: pretty;
+	}
+
+	h1 {
+		max-width: 11ch;
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(4.8rem, 11vw, 9.6rem);
+		line-height: 0.82;
+		font-weight: 900;
+	}
+
+	h2 {
+		max-width: 860px;
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+		line-height: 1.04;
+	}
+
+	h3 {
+		margin: 0;
+		font-size: clamp(1.35rem, 3vw, 2.05rem);
+		line-height: 1.02;
+	}
+
+	.intro {
+		max-width: 660px;
+		margin: 26px 0 0;
+		font-size: clamp(1.18rem, 2.6vw, 1.75rem);
+		line-height: 1.35;
+	}
+
+	.hero-actions,
+	.podcast-links,
+	.social-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 28px;
+	}
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		padding: 12px 18px;
+		border: 2px solid var(--ink);
+		font-weight: 900;
+		text-decoration: none;
+		transition:
+			transform 160ms ease,
+			box-shadow 160ms ease;
+	}
+
+	.button:hover,
+	.button:focus-visible {
+		transform: translate(-2px, -2px);
+		box-shadow: 5px 5px 0 var(--ink);
+	}
+
+	.primary {
+		background: var(--red);
+		color: #fff9ec;
+	}
+
+	.secondary {
+		background: #fff9ec;
+	}
+
+	.hero-art {
+		justify-self: stretch;
+	}
+
+	.portrait-card {
+		position: relative;
+		aspect-ratio: 4 / 5;
+		min-height: 460px;
+		padding: clamp(18px, 3vw, 28px);
+		border: 3px solid var(--ink);
+		background:
+			linear-gradient(135deg, rgba(255, 249, 236, 0.72) 0 34%, transparent 34%),
+			repeating-linear-gradient(90deg, rgba(32, 23, 19, 0.08) 0 2px, transparent 2px 18px),
+			var(--blue);
+		box-shadow: var(--shadow);
+	}
+
+	.portrait-frame {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		min-height: calc(460px - clamp(18px, 3vw, 28px) * 2);
+		overflow: hidden;
+		border: 3px solid var(--ink);
+		background:
+			radial-gradient(circle at 74% 18%, var(--yellow) 0 13%, transparent 14%),
+			linear-gradient(155deg, transparent 0 58%, rgba(32, 23, 19, 0.1) 58% 60%, transparent 60%),
+			repeating-linear-gradient(-18deg, rgba(32, 23, 19, 0.08) 0 3px, transparent 3px 17px),
+			#f7e7c8;
+	}
+
+	.portrait-head,
+	.portrait-neck,
+	.portrait-shirt,
+	.portrait-shadow,
+	.portrait-sun,
+	.portrait-line {
+		position: absolute;
+		display: block;
+		border: 3px solid var(--ink);
+	}
+
+	.portrait-sun {
+		top: 7%;
+		right: 11%;
+		width: 26%;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--yellow);
+	}
+
+	.portrait-head {
+		top: 20%;
+		left: 50%;
+		width: 31%;
+		aspect-ratio: 0.86;
+		border-radius: 48% 48% 42% 42%;
+		background: #f0b487;
+		transform: translateX(-50%) rotate(-2deg);
+		z-index: 3;
+	}
+
+	.portrait-head::before {
+		position: absolute;
+		content: "";
+		top: -10%;
+		left: 7%;
+		width: 86%;
+		height: 30%;
+		border: 3px solid var(--ink);
+		border-radius: 50% 50% 28% 28%;
+		background: var(--ink);
+	}
+
+	.portrait-neck {
+		top: 51%;
+		left: 50%;
+		width: 13%;
+		height: 14%;
+		background: #f0b487;
+		transform: translateX(-50%);
+		z-index: 2;
+	}
+
+	.portrait-shirt {
+		left: 18%;
+		bottom: -9%;
+		width: 64%;
+		height: 42%;
+		border-radius: 48% 48% 0 0;
+		background: var(--red);
+		z-index: 1;
+	}
+
+	.portrait-shadow {
+		right: 10%;
+		bottom: 15%;
+		width: 28%;
+		height: 31%;
+		background: var(--pink);
+	}
+
+	.portrait-line {
+		z-index: 2;
+		left: 10%;
+		width: 38%;
+		height: 16px;
+	}
+
+	.portrait-line.one {
+		top: 16%;
+		background: var(--green);
+		transform: rotate(-7deg);
+	}
+
+	.portrait-line.two {
+		top: 22%;
+		width: 50%;
+		background: var(--yellow);
+		transform: rotate(-3deg);
+	}
+
+	.portrait-caption {
+		position: absolute;
+		right: clamp(24px, 4vw, 44px);
+		bottom: clamp(24px, 4vw, 42px);
+		z-index: 5;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 8px;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(1.05rem, 2.4vw, 2.15rem);
+		font-weight: 900;
+		line-height: 0.9;
+	}
+
+	.portrait-caption span {
+		width: fit-content;
+		padding: 6px 9px;
+		border: 2px solid var(--ink);
+		background: #fff9ec;
+	}
+
+	.portrait-caption span:nth-child(2) {
+		background: var(--yellow);
+		transform: rotate(3deg);
+	}
+
+	.portrait-caption span:nth-child(3) {
+		background: var(--pink);
+		transform: rotate(-2deg);
+	}
+
+	.section {
+		scroll-margin-top: 96px;
+		padding: clamp(52px, 9vw, 108px) 0;
+		border-top: 2px solid var(--ink);
+	}
+
+	.section-heading {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
+		gap: clamp(22px, 5vw, 60px);
+		align-items: end;
+		margin-bottom: 28px;
+	}
+
+	.section-heading > .eyebrow {
+		grid-column: 1 / -1;
+		margin-bottom: -8px;
+	}
+
+	.section-heading > p,
+	.split > p {
+		margin: 0;
+		font-size: 1.05rem;
+		line-height: 1.65;
+	}
+
+	.writing-grid,
+	.path-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 16px;
+	}
+
+	.path-card {
+		display: flex;
+		flex-direction: column;
+		padding: 22px;
+		border: 2px solid var(--ink);
+		background: #fff9ec;
+		box-shadow: 6px 6px 0 rgba(32, 23, 19, 0.12);
+	}
+
+	.path-card span {
+		display: inline-flex;
+		width: fit-content;
+		padding: 5px 8px;
+		border: 1px solid var(--ink);
+		background: var(--yellow);
+		font-size: 0.74rem;
+		font-weight: 900;
+		text-transform: uppercase;
+	}
+
+	.path-card p {
+		margin: 18px 0 0;
+		line-height: 1.55;
+	}
+
+	.podcast {
+		scroll-margin-top: 96px;
+		display: grid;
+		grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1fr);
+		gap: clamp(22px, 5vw, 56px);
+		align-items: stretch;
+		padding: clamp(34px, 6vw, 64px);
+		border: 3px solid var(--ink);
+		background:
+			linear-gradient(90deg, rgba(255, 249, 236, 0.88), rgba(255, 249, 236, 0.7)),
+			repeating-linear-gradient(90deg, var(--green) 0 18px, var(--blue) 18px 36px);
+		box-shadow: var(--shadow);
+	}
+
+	.podcast-mark {
+		display: grid;
+		place-items: center;
+		min-height: 260px;
+		border: 3px solid var(--ink);
+		background: var(--red);
+		color: #fff9ec;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(4rem, 10vw, 8rem);
+		font-weight: 900;
+		transform: rotate(-2deg);
+	}
+
+	.podcast-copy {
+		align-self: center;
+		max-width: 680px;
+	}
+
+	.podcast-copy p:not(.eyebrow) {
+		margin: 24px 0 0;
+		font-size: clamp(1.08rem, 2vw, 1.35rem);
+		line-height: 1.55;
+	}
+
+	.path-card {
+		min-height: 260px;
+		background: var(--paper-deep);
+	}
+
+	.path-card:nth-child(2) {
+		background: #cfe0d0;
+	}
+
+	.path-card:nth-child(3) {
+		background: #f2d36f;
+	}
+
+	.writing-empty {
+		max-width: 680px;
+		padding: 24px;
+		border: 2px solid var(--ink);
+		background: #fff9ec;
+		box-shadow: 6px 6px 0 rgba(32, 23, 19, 0.12);
+	}
+
+	.writing-empty p {
+		margin: 0;
+		font-size: 1.08rem;
+		line-height: 1.65;
+	}
+
+	.writing-empty a {
+		display: inline-flex;
+		margin-top: 18px;
+		font-weight: 900;
+	}
+
+	.return-note {
+		display: grid;
+		grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.55fr);
+		gap: clamp(22px, 5vw, 58px);
+		align-items: end;
+		margin-top: 20px;
+		padding: clamp(34px, 6vw, 64px);
+		border: 3px solid var(--ink);
+		background: var(--ink);
+		color: #fff9ec;
+	}
+
+	.return-note p:not(.eyebrow) {
+		margin: 0;
+		font-size: 1.08rem;
+		line-height: 1.65;
+	}
+
+	.social-links {
+		margin-top: 20px;
+	}
+
+	.social-links a {
+		display: inline-flex;
+		padding: 8px 0;
+		font-weight: 900;
+	}
+
+	@media (max-width: 860px) {
+		.hero,
+		.section-heading,
+		.podcast,
+		.return-note {
+			grid-template-columns: 1fr;
+		}
+
+		.hero {
+			min-height: auto;
+			padding-top: 34px;
+		}
+
+		.portrait-card {
+			min-height: 380px;
+		}
+
+		.portrait-frame {
+			min-height: calc(380px - clamp(18px, 3vw, 28px) * 2);
+		}
+
+		.writing-grid,
+		.path-grid {
+			grid-template-columns: 1fr;
+		}
+
+	}
+
+	@media (max-width: 560px) {
+		main {
+			width: min(100% - 24px, 1180px);
+			padding-top: 10px;
+		}
+
+		.hero-actions,
+		.podcast-links {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.button {
+			width: 100%;
+		}
+
+		h1 {
+			font-size: clamp(4rem, 21vw, 6rem);
+		}
+
+		.portrait-card {
+			min-height: 320px;
+		}
+
+		.portrait-frame {
+			min-height: calc(320px - 36px);
+		}
+
+		.path-card,
+		.writing-empty,
+		.podcast,
+		.return-note {
+			padding: 18px;
+		}
+	}
+</style>
