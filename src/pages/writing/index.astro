@@ -1,9 +1,10 @@
 ---
 import WritingCard from "../../components/WritingCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getPublishedWriting } from "../../lib/writing";
+import { getAllWriting, getPublishedWriting } from "../../lib/writing";
 
-const posts = await getPublishedWriting();
+const includeDrafts = import.meta.env.DEV && Astro.url.searchParams.has("drafts");
+const posts = includeDrafts ? await getAllWriting() : await getPublishedWriting();
 
 const featured = posts.filter((post) => post.data.featured);
 const latest = posts.filter((post) => !post.data.featured);
@@ -20,7 +21,7 @@ const latest = posts.filter((post) => !post.data.featured);
 				<h1>Essays, notes, stories, and the occasional useful list.</h1>
 				<p>
 					A place for longer reflections and smaller thoughts about life, relationships,
-					spirituality, health, stories, comedy, and whatever keeps asking for words.
+					spirituality, and whatever keeps asking for words.
 				</p>
 			</section>
 
@@ -54,7 +55,7 @@ const latest = posts.filter((post) => !post.data.featured);
 						<section class="writing-section" aria-labelledby="latest-title">
 							<div class="section-heading">
 								<p class="eyebrow">Latest</p>
-								<h2 id="latest-title">Newest first, because the trail should be easy to follow.</h2>
+								<h2 id="latest-title">My latest brain babies.</h2>
 							</div>
 							<div class="post-grid">
 								{latest.map((post) => (
@@ -72,7 +73,7 @@ const latest = posts.filter((post) => !post.data.featured);
 	main {
 		width: min(1180px, calc(100% - 32px));
 		margin: 0 auto;
-		padding: clamp(42px, 8vw, 96px) 0 72px;
+		padding: clamp(36px, 7vw, 76px) 0 64px;
 	}
 
 	.hero {
@@ -102,11 +103,11 @@ const latest = posts.filter((post) => !post.data.featured);
 	}
 
 	h1 {
-		font-size: clamp(3rem, 6.4vw, 5.8rem);
+		font-size: clamp(2.1rem, 4vw, 3.7rem);
 	}
 
 	h2 {
-		font-size: clamp(2rem, 4vw, 3.6rem);
+		font-size: clamp(1.75rem, 3.2vw, 3rem);
 	}
 
 	.hero > p:not(.eyebrow),
@@ -122,8 +123,8 @@ const latest = posts.filter((post) => !post.data.featured);
 
 	.empty-state,
 	.writing-section {
-		margin-top: clamp(48px, 8vw, 92px);
-		padding-top: clamp(34px, 6vw, 64px);
+		margin-top: clamp(40px, 6vw, 72px);
+		padding-top: clamp(28px, 4.5vw, 48px);
 		border-top: 2px solid var(--ink);
 	}
 
@@ -143,14 +144,15 @@ const latest = posts.filter((post) => !post.data.featured);
 	.section-heading {
 		display: grid;
 		grid-template-columns: minmax(0, 0.8fr) minmax(240px, 0.55fr);
-		gap: clamp(20px, 5vw, 56px);
+		column-gap: clamp(20px, 5vw, 56px);
+		row-gap: 0;
 		align-items: end;
 		margin-bottom: 22px;
 	}
 
 	.section-heading > .eyebrow {
 		grid-column: 1 / -1;
-		margin-bottom: -6px;
+		margin-bottom: 14px;
 	}
 
 	.post-grid {

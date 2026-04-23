@@ -2,12 +2,17 @@
 title: "Unpopular Opinion: Single Ply is Superior"
 description: "My thoughts on single ply toilet paper and how it's better than the rest."
 date: 2026-04-20
+updated: 2026-04-20
 type: note
 topics:
   - life
   - comedy
 draft: false
 featured: false
+slug: single-ply-ftw
+image:
+  src: "/writing/single-ply-feature.png"
+  alt: "A playful collage illustration of a roll of single-ply toilet paper on a pedestal."
 ---
 
 I literally feel like I'm the only one who thinks this, but Scott's single ply TP is far superior than any of that 2-ply garbage.

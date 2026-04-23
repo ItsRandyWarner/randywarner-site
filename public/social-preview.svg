@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+	<title id="title">Randy Warner</title>
+	<desc id="desc">Social preview image for Randy Warner's personal creative site.</desc>
+	<rect width="1200" height="630" fill="#f8f1e3" />
+	<path d="M0 0H1200V630H0z" fill="url(#grid)" />
+	<rect x="76" y="76" width="1048" height="478" fill="#fff9ec" stroke="#201713" stroke-width="6" />
+	<rect x="786" y="76" width="338" height="478" fill="#1f6f8b" opacity="0.94" />
+	<rect x="822" y="112" width="266" height="406" fill="#f7e7c8" stroke="#201713" stroke-width="6" />
+	<circle cx="1000" cy="206" r="74" fill="#f2bd34" stroke="#201713" stroke-width="6" />
+	<path d="M878 474c10-94 76-140 157-115 62 19 95 72 99 159H878z" fill="#d94b3d" stroke="#201713" stroke-width="6" />
+	<rect x="874" y="166" width="176" height="24" fill="#54784d" stroke="#201713" stroke-width="5" transform="rotate(-5 874 166)" />
+	<rect x="876" y="210" width="178" height="24" fill="#f2bd34" stroke="#201713" stroke-width="5" />
+	<rect x="836" y="452" width="242" height="58" fill="#fff9ec" stroke="#201713" stroke-width="4" transform="rotate(-2 836 452)" />
+	<text x="856" y="492" fill="#201713" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="900">curiosity</text>
+	<text x="126" y="168" fill="#201713" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="1">A PEEK INSIDE THE MIND OF</text>
+	<text x="126" y="294" fill="#201713" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="900">Randy</text>
+	<text x="126" y="412" fill="#201713" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="900">Warner</text>
+	<text x="130" y="486" fill="#201713" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="700">Writing, The YaS Cast, photos,</text>
+	<text x="130" y="530" fill="#201713" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="700">and strange creative threads.</text>
+	<defs>
+		<pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+			<path d="M32 0H0V32" fill="none" stroke="#201713" stroke-opacity="0.08" stroke-width="1" />
+		</pattern>
+	</defs>
+</svg>

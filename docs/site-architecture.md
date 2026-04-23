@@ -39,6 +39,8 @@ Current writing fields:
 
 Draft and published files can live in separate folders for human clarity, while `draft` remains the code-level source of truth for publication state.
 
+In local development, `/writing/?drafts=1` includes draft entries and draft detail routes so Randy can review work without publishing it.
+
 ### `/podcasts`
 
 Purpose: a podcast hub led by The YaS Cast, with room for future podcast-related work.
@@ -121,4 +123,6 @@ Avoid adding every future section to the main nav before content exists. The hom
 - Build pages only when their content and purpose are clear enough.
 - Prefer Astro pages, layouts, and content collections before adding heavier tooling.
 - Keep the homepage as a curated front door, not a dumping ground for every future idea.
+- Keep primary navigation limited to implemented, useful sections.
+- Keep section spacing and heading rhythm consistent across pages when adding new routes.
 - Revisit Tailwind only if repeated components and shared styles become hard to maintain with Astro-scoped CSS.

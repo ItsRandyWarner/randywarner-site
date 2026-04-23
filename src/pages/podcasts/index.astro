@@ -10,17 +10,17 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 
 <BaseLayout
 	title="Podcasts | Randy Warner"
-	description="Podcasts from Randy Warner, led by The YaS Cast: conversations rooted in Yuba-Sutter, community, stories, humor, and deeper local curiosity."
+	description="Podcasts hosted or produced by Randy Warner."
 	current="podcast"
 >
 	<main>
 		<section class="hero" aria-labelledby="podcasts-title">
 			<div class="hero-copy">
 				<p class="eyebrow">Podcasts</p>
-				<h1 id="podcasts-title">Shows, conversations, and local curiosity.</h1>
+				<h1 id="podcasts-title">Shows, conversations, and (hopefully) a little bit of humor.</h1>
 				<p>
-					This is the home for podcast work: starting with The YaS Cast, with room
-					for future shows, produced projects, and guest appearances when they are ready.
+					Welcome to the podcast page. A place to explore my podcasts, suggest guests or topics,
+					and be a part of my podcast journey.
 				</p>
 			</div>
 		</section>
@@ -30,6 +30,7 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 				<Image
 					src={yasCastArtwork}
 					alt="The YaS Cast podcast artwork"
+					class="show-image"
 					width={900}
 					height={900}
 					loading="eager"
@@ -41,13 +42,13 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 				<h2 id="yas-title">The YaS Cast</h2>
 				<p>
 					A podcast dedicated to the Yuba-Sutter area, featuring interesting people,
-					political figures, and deeper conversations about Yuba-Sutter and the
+					political figures, and deeper conversations about Yuba-Sutter and its
 					surrounding communities.
 				</p>
 				<p>
-					It is made with local listeners in mind, but the hope is that plenty of
+					It's made with local listeners in mind, but the hope is that plenty of
 					episodes are funny, interesting, and useful even if you are listening from
-					somewhere else.
+					far, far away.
 				</p>
 
 				<div class="listen-links" aria-label="Listen to The YaS Cast">
@@ -68,8 +69,8 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 			</div>
 			<div class="request-copy">
 				<p>
-					The best conversations usually start with somebody noticing a person,
-					story, question, or local thread worth following.
+					The best conversations usually start with somebody noticing. A person, a story, a question.
+					And we notice better together! So share your ideas, your questions, and your suggestions for the show.
 				</p>
 				<a class="button primary" href="/podcasts/request/?podcast=the-yas-cast">
 					Send a podcast request
@@ -83,7 +84,7 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 	main {
 		width: min(1180px, calc(100% - 32px));
 		margin: 0 auto;
-		padding: clamp(42px, 8vw, 96px) 0 72px;
+		padding: clamp(36px, 7vw, 76px) 0 64px;
 	}
 
 	.hero {
@@ -112,12 +113,12 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 	}
 
 	h1 {
-		font-size: clamp(3.2rem, 7vw, 6.6rem);
-		max-width: 12ch;
+		font-size: clamp(2.2rem, 4.3vw, 4rem);
+		max-width: 18ch;
 	}
 
 	h2 {
-		font-size: clamp(2.1rem, 4.6vw, 4.4rem);
+		font-size: clamp(1.8rem, 3.6vw, 3.45rem);
 	}
 
 	.hero p:not(.eyebrow),
@@ -137,8 +138,8 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 		grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1fr);
 		gap: clamp(24px, 5vw, 64px);
 		align-items: center;
-		margin-top: clamp(48px, 8vw, 96px);
-		padding: clamp(24px, 5vw, 56px);
+		margin-top: clamp(40px, 6vw, 72px);
+		padding: clamp(24px, 4.5vw, 48px);
 		border: 3px solid var(--ink);
 		background:
 			linear-gradient(90deg, rgba(255, 249, 236, 0.86), rgba(255, 249, 236, 0.66)),
@@ -156,10 +157,11 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.14);
 	}
 
-	.show-art img {
+	:global(.show-image) {
 		display: block;
 		width: 100%;
 		height: 100%;
+		max-width: 100%;
 		object-fit: cover;
 	}
 
@@ -212,8 +214,8 @@ const spotifyUrl = "https://open.spotify.com/show/0bjdNEYKS5Zacs32XanGdk";
 		grid-template-columns: minmax(0, 0.95fr) minmax(260px, 0.62fr);
 		gap: clamp(22px, 5vw, 58px);
 		align-items: end;
-		margin-top: clamp(42px, 7vw, 84px);
-		padding-top: clamp(34px, 6vw, 64px);
+		margin-top: clamp(36px, 5.5vw, 64px);
+		padding-top: clamp(28px, 4.5vw, 48px);
 		border-top: 2px solid var(--ink);
 	}
 

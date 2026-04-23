@@ -192,4 +192,4 @@ Netlify Forms notes:
 ## Remaining Questions
 
 - Should the current request form fields be adjusted after Randy reviews the first version?
-- Should Netlify email notifications be configured after the site is connected/deployed?
+- Should Netlify email notifications be configured for new podcast request submissions?

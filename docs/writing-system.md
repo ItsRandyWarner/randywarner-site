@@ -19,7 +19,7 @@ src/
     └── writing/
         ├── published/
         │   ├── single-ply-ftw.md
-        │   └── 2026-04-essay-title.md
+        │   └── why-think-deep.md
         └── drafts/
             └── working-title.md
 ```
@@ -89,6 +89,8 @@ image:
 - `image`: optional featured image object with `src` and `alt`.
 - `canonicalUrl`: optional original URL if a piece is cross-posted.
 
+Practical workflow note: the starter draft template can include optional fields like `image` and `canonicalUrl` as reminders, even though real draft or published posts should remove them when they are not being used.
+
 ## Suggested Writing Types
 
 Start with a small set:
@@ -109,28 +111,26 @@ Each post should optionally support a featured image. This image can appear on:
 - Featured cards on `/writing`.
 - Post cards in the writing index.
 - The top of an individual post page.
-- Social preview images later, if needed.
+- Open Graph and Twitter preview images for that post when present.
+- The site-wide default social preview image still acts as the fallback when a post has no `image`.
 
 Recommended frontmatter:
 
 ```yaml
 image:
-  src: "/src/assets/writing/example-image.jpg"
+  src: "/writing/example-image.jpg"
   alt: "Short description of the image."
 ```
 
-Start with a shared image folder:
+Start with a shared public image folder:
 
 ```text
-src/
-├── assets/
-│   └── writing/
-│       └── example-image.jpg
-└── content/
-    └── writing/
+public/
+└── writing/
+    └── example-image.jpg
 ```
 
-This keeps Markdown files easy to browse while keeping images in a predictable place.
+This keeps Markdown files easy to browse while making the image URL usable for both page rendering and social preview metadata.
 
 If posts become image-heavy, consider switching to per-post folders later:
 
@@ -143,6 +143,8 @@ src/content/writing/published/post-slug/
 Do not start there unless the extra structure is clearly helpful.
 
 Design rule: featured images should render inside a fixed-ratio slot. The image source can be large, but the card should constrain display with a stable `aspect-ratio`, maximum visual height, and `object-fit: cover` so one oversized image cannot disrupt the writing index layout.
+
+Implementation rule: `image` should remain the single source of truth for post-level visuals. If a writing post has an `image`, the page uses that same image for the article header and social preview metadata. If the post has no `image`, the site falls back to the shared default social preview image.
 
 ## Suggested Topics
 
@@ -206,13 +208,27 @@ Recommended workflow:
 4. Set `draft: false`.
 5. Run `npm run build` before publishing.
 
+In local development, drafts can be previewed without publishing by running `npm run dev` and visiting `/writing/?drafts=1`. Drafts are only included in that dev-only view; production builds still generate public pages only for entries where `draft: false`.
+
+Draft cards and draft detail pages show a `Draft` label in local preview so they are visually distinct from public writing.
+
+## Markdown Highlights
+
+The site supports a small Markdown extension for highlights:
+
+```md
+==Highlighted text==
+```
+
+This renders as a styled `<mark>` element in writing posts. The transform is implemented in `astro.config.mjs` so no extra authoring dependency is needed.
+
 ## Implementation Notes
 
 - `src/content.config.ts` defines the `writing` collection.
 - Both `published/**/*.md` and `drafts/**/*.md` are loaded so drafts are validated too.
 - Public routes generate only for entries where `draft: false`.
+- Local development routes can include drafts for preview.
 - `src/lib/writing.ts` computes slugs from frontmatter `slug` when present, otherwise from the filename.
-- Example content stays in `drafts/` so sample files do not publish.
 - `src/components/WritingCard.astro` renders writing previews.
 
 ## Markdown Or MDX?

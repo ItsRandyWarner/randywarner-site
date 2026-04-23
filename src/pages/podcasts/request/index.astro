@@ -19,11 +19,11 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 
 		<section class="form-shell" aria-labelledby="form-title">
 			<div class="form-intro">
-				<p class="eyebrow">Start Here</p>
+				<p class="eyebrow">Talk to me</p>
 				<h2 id="form-title">What should I know?</h2>
 				<p>
-					A few useful details are enough. If the idea fits the show, I can follow
-					up from there.
+					Share your thoughts, give me some feedback, tell me who is out there that I need to talk to.
+					Let's make the show better together!
 				</p>
 			</div>
 
@@ -31,7 +31,9 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 				name="podcast-request"
 				method="POST"
 				action="/podcasts/request/thanks/"
+				netlify
 				data-netlify="true"
+				data-netlify-honeypot="bot-field"
 				netlify-honeypot="bot-field"
 			>
 				<input type="hidden" name="form-name" value="podcast-request" />
@@ -206,7 +208,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 	main {
 		width: min(1180px, calc(100% - 32px));
 		margin: 0 auto;
-		padding: clamp(42px, 8vw, 96px) 0 72px;
+		padding: clamp(36px, 7vw, 76px) 0 64px;
 	}
 
 	.hero {
@@ -235,12 +237,12 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 	}
 
 	h1 {
-		max-width: 12ch;
-		font-size: clamp(3.2rem, 7vw, 6.4rem);
+		max-width: 18ch;
+		font-size: clamp(2.2rem, 4.3vw, 3.9rem);
 	}
 
 	h2 {
-		font-size: clamp(2rem, 4vw, 3.7rem);
+		font-size: clamp(1.75rem, 3.2vw, 3rem);
 	}
 
 	.hero p:not(.eyebrow),
@@ -259,8 +261,8 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 		grid-template-columns: minmax(260px, 0.54fr) minmax(0, 1fr);
 		gap: clamp(24px, 5vw, 64px);
 		align-items: start;
-		margin-top: clamp(48px, 8vw, 92px);
-		padding-top: clamp(34px, 6vw, 64px);
+		margin-top: clamp(40px, 6vw, 72px);
+		padding-top: clamp(28px, 4.5vw, 48px);
 		border-top: 2px solid var(--ink);
 	}
 

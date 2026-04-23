@@ -35,6 +35,7 @@ The homepage should encourage visitors to browse writing, learn about the podcas
 1. Hero
    - Randy Warner as the first-viewport identity signal.
    - A short line about creativity, curiosity, connection, and making/sharing things.
+   - Use the personal photo-grid image in `src/assets/homepage/hero-photo-grid.jpg` as the right-side visual.
    - Primary action: explore.
 
 2. Writing
@@ -43,21 +44,24 @@ The homepage should encourage visitors to browse writing, learn about the podcas
 
 3. Podcast
    - Podcast title, description, and listening path.
-   - Link visitors to `/podcasts` for Spotify, Apple Podcasts, artwork, and request form access.
+   - Use The YaS Cast artwork in a constrained square treatment so the image supports the section without disrupting the layout.
+   - Link visitors to `/podcasts` for Spotify, Apple Podcasts, the fuller show context, and request form access.
 
 4. Creative Index
    - Small set of paths: photos, projects, shop, and social links.
    - Keep shop intentionally secondary.
+   - Keep this hidden from production until the paths are more than filler.
 
 5. Return Invitation
    - A simple closing section that tells visitors the site will keep changing.
+   - This now lives in the shared site footer instead of only on the homepage.
    - Avoid sales language.
 
 ## Tone And Copy Guidance
 
 - Use Randy's voice where possible.
 - Placeholder copy is allowed during development.
-- Before launch, Randy should review and rewrite prominent copy.
+- Randy can keep refining prominent copy after launch.
 - Avoid professional portfolio language unless a specific section needs it.
 - Avoid funnel, course, hustle, or sales language.
 
@@ -66,11 +70,12 @@ The homepage should encourage visitors to browse writing, learn about the podcas
 - Creative and personal before polished and professional.
 - Experimental is welcome, but should support exploration rather than become a gimmick.
 - Use clean alignment, strong composition, thoughtful contrast, color, texture, and pattern.
+- Keep section spacing intentional and consistent; avoid large empty gaps unless they are clearly part of the composition.
 - Avoid sterile minimalism and plain white-box portfolio energy.
 - Chosen direction: start with Eames/Girard order and warmth, add Corita Kent color and typographic spirit, and use only a small amount of David Carson looseness.
 - The homepage should feel organized enough to navigate and loose enough to feel alive.
 - Visual design should leave room for writing, podcast artwork, photos, and creative project imagery later.
-- The hero should move toward a personal image treatment. For now, use a stylized portrait placeholder rather than a purely abstract art poster.
+- The hero now uses a personal photo-grid treatment instead of the earlier stylized portrait placeholder. Keep the 4:5 composition and framed-card treatment unless a stronger visual direction appears.
 
 ## Known Links
 
@@ -87,7 +92,7 @@ The homepage should encourage visitors to browse writing, learn about the podcas
 - Full podcast archive
 - Newsletter or subscription flow unless a simple external link already exists
 
-## Open Inputs Needed Before Launch
+## Future Inputs
 
-- Randy's launch-ready copy pass for the hero, writing cards, podcast section, and return invitation.
-- A photo or preferred portrait direction for the hero image.
+- Ongoing Randy copy pass for the hero, writing cards, podcast section, future-path cards, and return invitation.
+- Final social preview image direction only if Randy wants the share card to use a different visual than the current custom preview artwork.

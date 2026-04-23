@@ -14,10 +14,24 @@ const navItems: NavItem[] = [
 ];
 ---
 
-<header class="site-header" aria-label="Primary navigation">
+<header class="site-header" aria-label="Primary navigation" data-site-header>
 	<div class="site-header-inner">
 		<a class="brand" href="/" aria-label="Randy Warner home">RW</a>
-		<nav>
+		<button
+			class="menu-toggle"
+			type="button"
+			aria-controls="primary-nav"
+			aria-expanded="false"
+			aria-label="Open navigation menu"
+			data-menu-toggle
+		>
+			<span class="menu-icon" aria-hidden="true">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</button>
+		<nav id="primary-nav" data-site-nav>
 			{
 				navItems.map((item) => (
 					<a href={item.href} aria-current={current === item.id ? "page" : undefined}>
@@ -28,6 +42,48 @@ const navItems: NavItem[] = [
 		</nav>
 	</div>
 </header>
+
+<script>
+	const desktopQuery = window.matchMedia("(min-width: 761px)");
+
+	document.querySelectorAll("[data-site-header]").forEach((header) => {
+		const button = header.querySelector("[data-menu-toggle]");
+		const nav = header.querySelector("[data-site-nav]");
+
+		if (!(header instanceof HTMLElement) || !(button instanceof HTMLButtonElement) || !nav) {
+			return;
+		}
+
+		const closeMenu = () => {
+			header.dataset.menuOpen = "false";
+			button.setAttribute("aria-expanded", "false");
+			button.setAttribute("aria-label", "Open navigation menu");
+		};
+
+		const toggleMenu = () => {
+			const isOpen = header.dataset.menuOpen === "true";
+			header.dataset.menuOpen = String(!isOpen);
+			button.setAttribute("aria-expanded", String(!isOpen));
+			button.setAttribute(
+				"aria-label",
+				isOpen ? "Open navigation menu" : "Close navigation menu",
+			);
+		};
+
+		closeMenu();
+		button.addEventListener("click", toggleMenu);
+
+		nav.querySelectorAll("a").forEach((link) => {
+			link.addEventListener("click", closeMenu);
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") closeMenu();
+		});
+
+		desktopQuery.addEventListener("change", closeMenu);
+	});
+</script>
 
 <style>
 	.site-header {
@@ -63,6 +119,32 @@ const navItems: NavItem[] = [
 		box-shadow: 5px 5px 0 var(--ink, #201713);
 	}
 
+	.menu-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		padding: 0;
+		border: 2px solid var(--ink, #201713);
+		background: var(--blue, #1f6f8b);
+		color: inherit;
+		box-shadow: 5px 5px 0 var(--ink, #201713);
+		cursor: pointer;
+	}
+
+	.menu-icon {
+		display: grid;
+		gap: 5px;
+	}
+
+	.menu-icon span {
+		display: block;
+		width: 23px;
+		height: 3px;
+		background: #fff9ec;
+	}
+
 	nav {
 		display: flex;
 		flex-wrap: wrap;
@@ -85,16 +167,37 @@ const navItems: NavItem[] = [
 		box-shadow: 3px 3px 0 rgba(32, 23, 19, 0.16);
 	}
 
-	@media (max-width: 560px) {
+	@media (max-width: 760px) {
 		.site-header-inner {
-			align-items: flex-start;
+			display: grid;
+			grid-template-columns: auto auto;
+			align-items: center;
 			width: min(100% - 24px, 1180px);
 			padding: 12px 0;
 		}
 
+		.menu-toggle {
+			display: grid;
+			justify-self: end;
+		}
+
+		nav {
+			display: none;
+			grid-column: 1 / -1;
+			grid-template-columns: 1fr;
+			width: 100%;
+			padding: 10px 0 4px;
+		}
+
+		.site-header[data-menu-open="true"] nav {
+			display: grid;
+		}
+
 		nav a {
-			padding: 8px 9px;
-			font-size: 0.82rem;
+			width: 100%;
+			padding: 11px 12px;
+			background: #fff9ec;
+			font-size: 0.9rem;
 		}
 	}
 </style>

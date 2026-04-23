@@ -2,10 +2,12 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 export type WritingPost = CollectionEntry<"writing">;
 
+export async function getAllWriting() {
+	return (await getCollection("writing")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
 export async function getPublishedWriting() {
-	return (await getCollection("writing"))
-		.filter((post) => !post.data.draft)
-		.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+	return (await getAllWriting()).filter((post) => !post.data.draft);
 }
 
 export function formatWritingDate(date: Date) {

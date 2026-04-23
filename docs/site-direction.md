@@ -36,7 +36,7 @@ Recommended tone for the first version:
 - Thoughtful without becoming overly polished.
 - Human and specific rather than corporate.
 - Experimental where it serves the feeling of discovery.
-- Placeholder copy is acceptable during development, but Randy should review and rewrite key visible copy before launch.
+- Placeholder copy is acceptable during development, but live pages should keep moving toward Randy's actual voice.
 
 Words the site should earn over time:
 
@@ -79,9 +79,9 @@ The first homepage should be a creative, personal, single-page experience with e
    - Lightweight paths into future areas:
      - Photos
      - Creative projects
-     - Store
-     - Community
+     - Shop
    - These can be marked as emerging or coming later if the content is not ready.
+   - Community ideas should stay behind the scenes for v1.
 
 5. Return Invitation
    - A warm reason to come back, such as new writing, podcast updates, photos, or experiments.
@@ -123,6 +123,7 @@ These are likely long-term content areas:
 - Maintain the real hybrid homepage focused on writing and the podcast.
 - Add basic metadata.
 - Establish visual tone.
+- Keep the homepage hero personal by using the photo-grid image treatment.
 - Keep homepage sections simple while core systems are still evolving.
 - Make exploration and return visits the main behavior.
 
@@ -131,7 +132,7 @@ These are likely long-term content areas:
 - Maintain shared layout/components as new repeated patterns emerge.
 - Use the implemented writing page and content system as the model for future structured content.
 - Maintain the implemented `/podcasts` hub and request form.
-- Add durable footer if the site needs one beyond the homepage return note.
+- Maintain the shared footer and refine its content as contact/about/social needs become clearer.
 - Explore whether The YaS Cast episodes should be fetched from RSS at build time.
 
 ### Stage 3: Depth
@@ -173,4 +174,4 @@ These are likely long-term content areas:
 
 ## Next Recommended Step
 
-Review the implemented `/podcasts` and `/podcasts/request` pages, then tune copy/form fields as needed.
+Choose the next content or structure priority: more writing, podcast request-page refinement, a lightweight about/contact path, or a real photos/projects section.

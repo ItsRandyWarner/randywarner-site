@@ -1,17 +1,26 @@
 ---
+import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 
 type CurrentPage = "home" | "writing" | "podcast" | "";
+type SocialType = "website" | "article";
 
 const {
 	title,
 	description,
 	current = "",
+	image = "/social-preview.png",
+	type = "website",
 } = Astro.props as {
 	title: string;
 	description: string;
 	current?: CurrentPage;
+	image?: string;
+	type?: SocialType;
 };
+
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+const socialImageUrl = Astro.site ? new URL(image, Astro.site).toString() : image;
 ---
 
 <!doctype html>
@@ -19,15 +28,39 @@ const {
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
+		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+		<meta property="og:site_name" content="Randy Warner" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		{canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+		<meta property="og:image" content={socialImageUrl} />
+		<meta
+			property="og:image:alt"
+			content="A colorful preview card for Randy Warner's personal creative site."
+		/>
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImageUrl} />
+		<meta
+			name="twitter:image:alt"
+			content="A colorful preview card for Randy Warner's personal creative site."
+		/>
 		<title>{title}</title>
 	</head>
 	<body>
 		<SiteHeader current={current} />
 		<slot />
+		<SiteFooter />
 	</body>
 </html>
 
