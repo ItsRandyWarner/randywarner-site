@@ -10,20 +10,20 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 	<main>
 		<section class="hero" aria-labelledby="request-title">
 			<p class="eyebrow">Podcast Request</p>
-			<h1 id="request-title">Send an idea for The YaS Cast.</h1>
+			<h1 id="request-title">Got an idea for The YaS Cast?</h1>
 			<p>
-				Suggest a guest, share a topic, or tell me why you would be a good fit for
-				a conversation about Yuba-Sutter and the surrounding area.
+				If there is someone I should talk to, a topic I should cover, or a reason we
+				should sit down and record something, send it my way.
 			</p>
 		</section>
 
 		<section class="form-shell" aria-labelledby="form-title">
 			<div class="form-intro">
 				<p class="eyebrow">Talk to me</p>
-				<h2 id="form-title">What should I know?</h2>
+				<h2 id="form-title">What have you got?</h2>
 				<p>
-					Share your thoughts, give me some feedback, tell me who is out there that I need to talk to.
-					Let's make the show better together!
+					Send as much or as little as you want. More detail is always helpful, but
+					you do not need to write a novel to send a good idea.
 				</p>
 			</div>
 
@@ -78,32 +78,37 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 					</label>
 
 					<label>
-						<span>Why would they make a good episode?</span>
+						<span>Why them?</span>
 						<textarea name="guest_reason" rows="5" data-required-when="guest_suggestion"></textarea>
 					</label>
 				</div>
 
 				<div data-panel="topic_suggestion" hidden>
 					<label>
-						<span>What topic should the show cover?</span>
+						<span>Topic</span>
 						<input name="suggested_topic" data-required-when="topic_suggestion" />
 					</label>
 
 					<label>
-						<span>Why does this topic matter?</span>
+						<span>Why does it matter?</span>
 						<textarea name="topic_reason" rows="5" data-required-when="topic_suggestion"></textarea>
 					</label>
 				</div>
 
 				<div data-panel="guest_request" hidden>
 					<label>
-						<span>Tell me about yourself</span>
+						<span>Tell me a little about yourself</span>
 						<textarea name="guest_bio" rows="5" data-required-when="guest_request"></textarea>
 					</label>
 
 					<label>
-						<span>What would we talk about?</span>
+						<span>Topic</span>
 						<textarea name="guest_topic" rows="5" data-required-when="guest_request"></textarea>
+					</label>
+
+					<label>
+						<span>Why would this be a good fit for the show?</span>
+						<textarea name="guest_fit" rows="5" data-required-when="guest_request"></textarea>
 					</label>
 
 					<div class="field-grid">
@@ -113,10 +118,18 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 						</label>
 
 						<label>
-							<span>Availability</span>
-							<input name="availability" />
+							<span>Best way to reach you</span>
+							<input name="contact_preference" placeholder="Email, phone, text, whatever works best" />
 						</label>
 					</div>
+
+					<label>
+						<span>Anything I should know about scheduling?</span>
+						<input
+							name="scheduling_notes"
+							placeholder="The show is usually in person, but you can mention anything helpful here."
+						/>
+					</label>
 				</div>
 
 				<div data-panel="other" hidden>
@@ -127,11 +140,11 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 				</div>
 
 				<label>
-					<span>Anything else useful?</span>
+					<span>Anything else you want to add?</span>
 					<textarea name="additional_context" rows="4"></textarea>
 				</label>
 
-				<button type="submit">Send request</button>
+				<button type="submit">Send it over</button>
 			</form>
 		</section>
 	</main>

@@ -38,6 +38,7 @@ Astro site scaffold for the next version of the Randy Warner website.
 │   │   └── writing.ts
 │   └── pages/
 │       ├── index.astro
+│       ├── now.astro
 │       ├── podcasts/
 │       │   ├── index.astro
 │       │   └── request/

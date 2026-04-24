@@ -154,6 +154,12 @@ const paths = [
 					</section>
 				)
 			}
+
+			<section class="now-callout" aria-label="Now page callout">
+				<p>
+					If you’re curious what’s getting my attention lately, I made a <a href="/now/">/now page</a>.
+				</p>
+			</section>
 	</main>
 </BaseLayout>
 
@@ -369,6 +375,33 @@ const paths = [
 		box-shadow: var(--shadow);
 	}
 
+	.now-callout {
+		margin-top: clamp(18px, 3vw, 30px);
+		padding: 16px 22px;
+		border: 3px solid var(--ink);
+		background:
+			linear-gradient(180deg, rgba(245, 232, 190, 0.92), rgba(245, 232, 190, 0.92)),
+			repeating-linear-gradient(
+				90deg,
+				rgba(242, 189, 52, 0.3) 0 18px,
+				rgba(31, 111, 139, 0.16) 18px 36px
+			);
+		box-shadow: var(--shadow);
+	}
+
+	.now-callout p {
+		margin: 0;
+		font-size: 1.02rem;
+		font-weight: 800;
+		line-height: 1.4;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	.now-callout a {
+		font-weight: 900;
+	}
+
 	.podcast-art {
 		display: grid;
 		place-items: center;
@@ -483,12 +516,17 @@ const paths = [
 
 		.path-card,
 		.writing-empty,
-		.podcast {
+		.podcast,
+		.now-callout {
 			padding: 18px;
 		}
 
 		.path-card {
 			min-height: 220px;
+		}
+
+		.now-callout p {
+			white-space: normal;
 		}
 	}
 </style>

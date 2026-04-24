@@ -12,6 +12,7 @@ This repository is an Astro 6 static site for Randy Warner's personal creative h
 - Production URL: `https://randywarner.com`
 - Implemented routes:
   - `/`
+  - `/now`
   - `/writing`
   - `/writing/[slug]`
   - `/podcasts`
@@ -42,6 +43,8 @@ The site should feel like a personal creative hub centered on creativity, curios
 
 - Continue refining the homepage copy in Randy's voice.
 - Plan the next stage of content and site depth.
+- Refine the copy of `/now` while keeping it current through the light freshness plan and reminder cadence.
+- Keep `/now` discoverable without promoting it into primary navigation too early.
 - Use Netlify preview deploys before publishing meaningful changes.
 - Keep doing visual QA after spacing, type, or layout changes.
 

@@ -5,6 +5,7 @@
 Implemented:
 
 - `/` - hybrid homepage for writing, The YaS Cast, and future creative paths.
+- `/now` - living snapshot page for current focus and recently changed things.
 - `/writing` - writing index backed by Astro content collections.
 - `/writing/[slug]` - implemented individual writing route for published posts.
 - `/podcasts` - podcast hub led by The YaS Cast.
@@ -102,11 +103,31 @@ Status: future version.
 
 This page may need its own planning because image handling, galleries, captions, albums, and optimization choices can affect the technical structure.
 
+### `/now`
+
+Purpose: a living snapshot of what Randy is focused on lately.
+
+Status: implemented.
+
+This page works because it can feel alive and personal without requiring the formality of an about page or the heavier structure of a full new content section.
+
+Recommended shape:
+
+- Short intro explaining the page.
+- A few manually written sections such as current focus, podcast energy, writing, and other curiosities.
+- A visible "last updated" date.
+
+Implementation guidance:
+
+- Keep it as a simple manually edited page for now.
+- Do not treat it like a blog or a dashboard.
+- Keep it out of primary navigation for now.
+- Let the homepage provide a subtle discovery path to `/now` rather than turning it into a header link.
+
 ## Future Pages To Consider
 
 - `/projects` for creative experiments and things Randy makes.
 - `/shop` for inexpensive creative projects, kept secondary and non-salesy.
-- `/now` for current focus and recently updated things.
 
 ## Navigation Direction
 

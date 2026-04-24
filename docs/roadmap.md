@@ -48,6 +48,8 @@ Status: in progress.
 - `/podcasts` hub direction documented.
 - `/podcasts` hub implemented.
 - `/podcasts/request` Netlify form implemented.
+- `/now` implemented as a living snapshot page.
+- Homepage now includes a light `/now` callout above the footer while the page remains outside primary navigation.
 - The YaS Cast artwork is wired into `/podcasts` through Astro's image pipeline.
 - The YaS Cast artwork is also used in the homepage podcast section with constrained sizing.
 - Mobile navigation now collapses behind an accessible hamburger button on narrower screens.
@@ -59,6 +61,8 @@ Next:
 
 - Add more real writing pieces.
 - Review and tune podcast request form fields/copy.
+- Review and tune `/now` page copy after seeing it in use.
+- Use the `/now` freshness plan and reminder cadence to keep the page current without turning it into a chore.
 - Consider extracting shared button/panel styles if the same CSS keeps repeating across new pages.
 - Keep about/contact/photos pinned until their content and purpose are clearer.
 

@@ -132,3 +132,18 @@ Date: 2026-04-23
 Decision: Reuse writing post `image` frontmatter for social previews.
 Context: Randy wanted writing posts to share with their own featured image on Facebook and other platforms, without maintaining a second social-image field.
 Consequences: Writing detail pages now pass `post.data.image?.src` into `BaseLayout` for Open Graph/Twitter metadata. Posts with an `image` use it both on-page and in social previews; posts without one fall back to the shared `public/social-preview.png` image.
+
+Date: 2026-04-23
+Decision: Prototype a `/now` page without committing it to primary navigation yet.
+Context: A lightweight living snapshot page felt like a strong fit for the site's tone, but Randy is still evaluating whether it should become a permanent section.
+Consequences: `/now` can be explored as a simple manually maintained page. It stays out of primary navigation until it proves useful and sustainable.
+
+Date: 2026-04-23
+Decision: Keep `/now` as a real page and remove the temporary concept routes.
+Context: Randy reviewed multiple `/now` directions in the live site and chose a combined version with a strong hero, one boxed main note, lighter current-signal entries, and a proof-of-life section.
+Consequences: `/now` is now part of the site as a manually maintained page. Temporary concept routes were removed, and the page remains out of primary navigation while its copy and upkeep rhythm continue to settle.
+
+Date: 2026-04-23
+Decision: Surface `/now` through a homepage callout instead of the shared footer or primary navigation.
+Context: Randy liked `/now` feeling discoverable and special, but still wanted a clearer invitation than leaving it completely hidden.
+Consequences: The homepage now includes a slim callout above the footer that links to `/now`. The shared footer stays focused on its return invitation, social links, and copyright line.

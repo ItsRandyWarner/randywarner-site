@@ -111,9 +111,11 @@ These are likely long-term content areas:
 ## Page Direction
 
 - Writing has its own page and content system.
+- `/now` now exists as a lighter living snapshot page for current focus, active energy, and proof-of-life updates.
 - Podcasts have their own `/podcasts` hub page, led by The YaS Cast but flexible enough for produced shows, future shows, guest appearances, and audio experiments.
 - About and contact pages are possible later, but should remain pinned until the need is clearer.
 - Photography and other creative areas belong to future versions.
+- `/now` works because it can make the site feel alive without needing the formality of an about page or the overhead of a full new content section.
 
 ## Feature Map
 
@@ -144,7 +146,7 @@ These are likely long-term content areas:
 
 ### Stage 4: Living System
 
-- Add a "now" page or regularly updated status surface.
+- Maintain `/now` as a lightweight regularly updated status surface.
 - Add publishing workflow for writing or notes.
 - Add search, tagging, filters, or collections if content volume justifies them.
 - Add interactive or experimental features aligned with the site's personality.
@@ -175,3 +177,84 @@ These are likely long-term content areas:
 ## Next Recommended Step
 
 Choose the next content or structure priority: more writing, podcast request-page refinement, a lightweight about/contact path, or a real photos/projects section.
+
+## `/now` Note
+
+`/now` is now part of the site as a lightweight living snapshot.
+
+Why it fits:
+
+- It offers a living snapshot of Randy's current focus, recent energy, and active curiosities.
+- It gives returning visitors a reason to check back even when there is not a newly published essay or major new page.
+- It can stay informal and personal, which fits the site's tone better than forcing an early about page.
+
+What it should not become:
+
+- A second homepage.
+- A full blog feed.
+- A chore that needs constant updating.
+
+Recommendation:
+
+- Treat `/now` as a lightweight status surface.
+- Keep it manually curated.
+- Update it only when it starts feeling stale, not on a strict publishing schedule.
+- Keep it out of primary navigation for now, even though the page itself is real.
+- Let the homepage hint at `/now` lightly rather than promoting it like a primary section.
+
+## `/now` Freshness Plan
+
+Goal:
+
+- Keep `/now` feeling alive and current without turning it into an obligation.
+
+Recommended rhythm:
+
+- Re-read the page every 2 to 4 weeks.
+- Update it sooner when something actually shifts in Randy's attention, energy, or current work.
+- Skip updates when nothing meaningful has changed.
+
+What counts as enough change to update it:
+
+- A new main preoccupation or recurring thought.
+- A meaningful shift in podcast momentum, writing energy, or personal focus.
+- A few concrete proof-of-life changes that make the page feel current again.
+- A line or section starting to feel obviously stale or no longer true.
+
+What an update can look like:
+
+- Swap one sentence.
+- Rewrite one signal.
+- Replace the main note.
+- Refresh the proof-of-life entries.
+- Move the `Last Updated` date only when the page content actually changed.
+
+What to avoid:
+
+- Treating `/now` like a blog with posting pressure.
+- Updating it just to keep a streak alive.
+- Filling it with tiny admin-style changes that do not make the page feel more current.
+- Letting it turn into a second homepage or a dumping ground for everything.
+
+Good enough standard:
+
+- If the page still feels true, it is fresh enough.
+- If it feels slightly behind but still honest, that is acceptable.
+- If multiple sections feel disconnected from Randy's real current attention, it is time for a pass.
+
+Practical maintenance approach:
+
+- Start with the question: "What is actually getting my attention right now?"
+- Update the main note first.
+- Then decide whether the signals or proof-of-life section need to catch up.
+- Stop once the page feels true again.
+
+### `/now` Update Checklist
+
+- Read the page top to bottom once before changing anything.
+- Ask: "What is actually getting my attention right now?"
+- Check whether the main note still feels true.
+- Check whether each current signal still feels current.
+- Replace any proof-of-life line that feels stale, obvious, or no longer interesting.
+- Update the `Last Updated` date only if the page content changed.
+- Stop when the page feels honest again; do not keep polishing just to fill time.

@@ -19,6 +19,7 @@ The site is a mostly static Astro application:
 - `/podcasts` - implemented podcast hub for The YaS Cast, with future room for produced podcasts, future shows, and guest appearances.
 - `/podcasts/request` - implemented shared podcast request form.
 - `/podcasts/request/thanks` - implemented form success page.
+- `/now` - implemented living snapshot page, manually authored and intentionally kept outside primary navigation for now.
 - `/about` - possible later page.
 - `/contact` - possible later page.
 - `/photos` - future photography page.
@@ -64,11 +65,15 @@ See `docs/components.md` before adding repeated UI or content helpers.
 
 Homepage-specific visual assets currently live in `src/assets/homepage/` so Astro can optimize them at build time. The hero photo grid is `src/assets/homepage/hero-photo-grid.jpg`.
 
+The homepage also includes a slim callout to `/now` above the shared footer. This keeps the page discoverable without adding it to primary navigation.
+
 ## Near-Term Implementation
 
 1. Add new components only when UI repeats across pages or when a page becomes hard to scan.
 2. Consider extracting shared button/panel styles if repeated CSS starts slowing down page work.
-3. Run `npm run build` before publishing changes.
+3. Keep `/now` manually authored unless a real update workflow need appears.
+4. Revisit `/now` on a light 2 to 4 week rhythm, or sooner when Randy's real current focus changes.
+5. Run `npm run build` before publishing changes.
 
 ## Quality Gates
 
