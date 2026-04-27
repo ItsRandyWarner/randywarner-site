@@ -11,6 +11,7 @@ Implemented:
 - `/podcasts` - podcast hub led by The YaS Cast.
 - `/podcasts/request` - shared podcast request form for guest suggestions, topic suggestions, and guest requests.
 - `/podcasts/request/thanks` - form success page.
+- `/comments/moderate` - private comment moderation surface implemented in code for internal use.
 
 The homepage should remain the front door. Future pages should deepen the main areas without turning the site into a heavy platform too early.
 
@@ -41,6 +42,14 @@ Current writing fields:
 Draft and published files can live in separate folders for human clarity, while `draft` remains the code-level source of truth for publication state.
 
 In local development, `/writing/?drafts=1` includes draft entries and draft detail routes so Randy can review work without publishing it.
+
+Future note:
+
+- Comments now have an initial v1 implementation in code for published writing posts only.
+- The current version is a moderated comment layer with a simple submission form, lightweight replies, and approved comments rendered below the article body.
+- Moderation happens through a private route backed by server-side endpoints and live private storage, so approved comments do not require deploys.
+- The moderation surface is now a small inbox with Needs review, Published, and Rejected status views, a post-slug filter, approving, rejecting, restoring, deleting published comments, and clearing all comments for a post slug.
+- See `docs/comment-system-plan.md`.
 
 ### `/podcasts`
 
@@ -128,6 +137,12 @@ Implementation guidance:
 
 - `/projects` for creative experiments and things Randy makes.
 - `/shop` for inexpensive creative projects, kept secondary and non-salesy.
+
+## Future Interaction To Consider
+
+- Writing-post comments, only when Randy wants to actively moderate them.
+- Keep interaction features tied to real content surfaces instead of creating a generic community area.
+- Build on the staged dynamic comment workflow in `docs/comment-system-plan.md` before layering on identity, trusted commenters, or giveaway mechanics.
 
 ## Navigation Direction
 

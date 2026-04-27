@@ -50,12 +50,14 @@ Status: in progress.
 - `/podcasts/request` Netlify form implemented.
 - `/now` implemented as a living snapshot page.
 - Homepage now includes a light `/now` callout above the footer while the page remains outside primary navigation.
+- Initial dynamic comment-system foundation implemented in code for writing posts, including live approved comments, submission, and private moderation.
 - The YaS Cast artwork is wired into `/podcasts` through Astro's image pipeline.
 - The YaS Cast artwork is also used in the homepage podcast section with constrained sizing.
 - Mobile navigation now collapses behind an accessible hamburger button on narrower screens.
 - Shared footer now appears across public pages.
 - Site-wide type and spacing have had an initial visual QA pass across desktop and mobile screenshots.
 - Homepage future-path cards are kept out of production until those paths have real content.
+- Comment moderation dashboard Build 1 is implemented: `/comments/moderate` now has inbox-style status views for Needs review, Published, and Rejected, plus a post-slug filter.
 
 Next:
 
@@ -63,6 +65,11 @@ Next:
 - Review and tune podcast request form fields/copy.
 - Review and tune `/now` page copy after seeing it in use.
 - Use the `/now` freshness plan and reminder cadence to keep the page current without turning it into a chore.
+- Tune the comment moderation inbox after real use, now that status views and post-slug filtering are in place.
+- Decide whether the moderation page needs any more post-launch cleanup tools beyond delete-comment and clear-post actions.
+- Use `docs/comment-moderation-dashboard-plan.md` for the next moderation-dashboard upgrade once comment volume spreads across more posts.
+- If moderation work resumes, prioritize the `By post` index next, then a post-specific moderation view.
+- Keep the broader interaction-and-giveaway plan documented for later, but do not implement identity or giveaway mechanics until comment behavior and moderation needs are better understood.
 - Consider extracting shared button/panel styles if the same CSS keeps repeating across new pages.
 - Keep about/contact/photos pinned until their content and purpose are clearer.
 
@@ -85,6 +92,11 @@ Next:
 ## Backlog
 
 - Homepage copy pass
+- Investigate Safari homepage favicon mismatch; the home page may still show the Astro icon instead of the RW icon
+- Signed-cookie identity for comments before trusted commenters, giveaway eligibility, or higher-confidence participant tracking
+- Future interaction and giveaway system using the plan in `docs/interaction-and-giveaway-plan.md`
+- Future monthly giveaway model: one approved qualifying interaction per participant, multiple small winners
+- Future giveaway rule implementation using `docs/giveaway-rules-framework.md`
 - About page
 - Contact path
 - Photography page

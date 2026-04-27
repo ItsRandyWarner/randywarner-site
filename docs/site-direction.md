@@ -157,7 +157,7 @@ These are likely long-term content areas:
 
 - Full CMS or database.
 - Full community system.
-- Commenting, accounts, or giveaway automation.
+- Accounts or giveaway automation.
 - Shop or payment flow.
 - Multi-page content system before the first writing and podcast structure is clear.
 - Heavy blog infrastructure before writing format and cadence are known.
@@ -165,6 +165,32 @@ These are likely long-term content areas:
 - Heavy animation or interactive systems before the visual direction is settled.
 - Analytics before there is a launch baseline or decision it will inform.
 - Anything with "buy my course" energy.
+
+## Comment System Note
+
+The writing comment system has an implemented first version and a documented upgrade path in `docs/comment-system-plan.md`.
+A broader future interaction layer, including lightweight identity and giveaway direction, is documented in `docs/interaction-and-giveaway-plan.md`.
+A future giveaway rule model is documented in `docs/giveaway-rules-framework.md`.
+
+Recommended position:
+
+- start with writing-post comments only
+- keep comments manually moderated
+- include Randy's own public replies in the first version
+- let commenters use public display names so local community members can recognize each other
+- allow replies, but keep the conversation structure simple and readable
+- avoid traditional accounts, likes, threading, and site-wide rollout in the first version
+- build the backend in a dynamic staged way so approved comments do not require site deploys
+- keep the public experience lightweight even if the backend grows more capable
+
+This keeps comments aligned with the site's personal tone and avoids turning interaction into a heavy platform feature too early.
+
+Giveaway direction:
+
+- if giveaways are added later, they should reward meaningful participation without favoring high-volume activity
+- the current preferred direction is one approved qualifying interaction per participant per month
+- monthly giveaways should likely have multiple small winners rather than one large winner
+- basic commenting should stay low-friction, with stronger verification only when giveaway eligibility, trust, or abuse handling requires it
 
 ## Open Questions
 

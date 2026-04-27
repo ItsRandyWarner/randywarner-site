@@ -43,7 +43,9 @@ Primary job for v1:
 
 ## The YaS Cast Positioning
 
-The YaS Cast is a podcast dedicated to the Yuba-Sutter area. It features interesting people, political figures, and deeper conversations about Yuba-Sutter and the surrounding areas.
+The YaS Cast is Randy's way of connecting with people and exploring the community around him a little more deeply.
+
+The show should feel less like a generic local-interest listing and more like a personal excuse to have better conversations with the people who make Yuba-Sutter what it is.
 
 Primary audience:
 
@@ -62,6 +64,12 @@ Topics and recurring interests:
 - Stories
 - Comedy
 - Community
+
+Copy guidance:
+
+- Prefer personal, first-person framing when Randy is describing why the show exists.
+- Avoid generic phrases like "focused on the Yuba-Sutter area" when a more human explanation is available.
+- The homepage and `/podcasts` page should sound like they come from the same voice, even if the homepage version is shorter.
 
 ## Recommended V1 Structure
 

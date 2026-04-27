@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Comments from "../../components/Comments.astro";
 import { formatWritingDate, getAllWriting, getPublishedWriting, writingTypeLabel, writingSlug } from "../../lib/writing";
 
 export async function getStaticPaths() {
@@ -51,6 +52,7 @@ const { Content } = await render(post);
 					<Content />
 				</div>
 			</article>
+			<Comments postSlug={writingSlug(post)} />
 	</main>
 </BaseLayout>
 

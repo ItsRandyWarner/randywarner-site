@@ -206,7 +206,7 @@ Recommended workflow:
 2. Keep `draft: true` while writing.
 3. When ready, move the file to `src/content/writing/published/`.
 4. Set `draft: false`.
-5. Run `npm run build` before publishing.
+5. Run `npm run build` before publishing. The build syncs published writing slugs into the comment API allowlist before Astro builds the site.
 
 In local development, drafts can be previewed without publishing by running `npm run dev` and visiting `/writing/?drafts=1`. Drafts are only included in that dev-only view; production builds still generate public pages only for entries where `draft: false`.
 

@@ -147,3 +147,78 @@ Date: 2026-04-23
 Decision: Surface `/now` through a homepage callout instead of the shared footer or primary navigation.
 Context: Randy liked `/now` feeling discoverable and special, but still wanted a clearer invitation than leaving it completely hidden.
 Consequences: The homepage now includes a slim callout above the footer that links to `/now`. The shared footer stays focused on its return invitation, social links, and copyright line.
+
+Date: 2026-04-23
+Decision: Make homepage and podcast-page copy for The YaS Cast more personal and connection-driven.
+Context: The earlier podcast description read more like general category copy than Randy's voice. Randy described the show as a way to connect with people, feel connected to the community, and explore Yuba-Sutter more deeply.
+Consequences: The homepage and `/podcasts` page now describe The YaS Cast in more personal first-person terms, with less brochure-like framing.
+
+Date: 2026-04-24
+Decision: If comments are added later, start with a lightweight writing-only moderated model instead of a full dynamic community system.
+Context: Randy wanted a future comment-system plan documented without committing to implementation yet. The site still aims to stay mostly static, personal, and manageable.
+Consequences: The recommended first version is documented in `docs/comment-system-plan.md`: comments would begin on published writing posts only, use manual approval, avoid accounts and threading, and favor a curated workflow before any heavier dynamic system is considered.
+
+Date: 2026-04-24
+Decision: Future writing comments should default to all published posts and include Randy's own public replies, while lightweight identity and giveaway tracking stay as later layers.
+Context: Randy clarified that comments should be broadly available across writing, that first-party replies matter from the start, that he does not want traditional accounts or logins, and that comments may eventually feed into a giveaway system.
+Consequences: The comment plan now assumes comments on all published writing posts by default, includes a first-party reply model in v1, recommends no public website links at first, and treats verified identity plus giveaway tracking as future interaction-system work rather than part of the initial rollout.
+
+Date: 2026-04-24
+Decision: Document the broader interaction and giveaway system separately from the initial comment release.
+Context: Randy wants lightweight identity and future giveaway mechanics, but not traditional accounts or a heavy platform. Those needs are bigger than the comment feature alone.
+Consequences: `docs/interaction-and-giveaway-plan.md` now defines a layered future model: public interaction surfaces, private participant identity, interaction records, eligibility rules, and giveaway entry records. Comments remain the likely first interaction surface, while identity and giveaway logic stay planned for later phases.
+
+Date: 2026-04-24
+Decision: Future giveaway mechanics should prioritize fairness over activity volume.
+Context: Randy wants multiple small winners and does not want highly active commenters to gain a meaningful advantage over people who simply participate.
+Consequences: The planning docs now point toward a monthly giveaway model where one approved qualifying interaction gives a participant one entry, with additional same-month activity not stacking more odds by default. Public display names remain visible for community recognition, while participant tracking stays private behind the scenes.
+
+Date: 2026-04-24
+Decision: Define giveaway qualification through a dedicated rules framework.
+Context: The broader interaction plan established the system layers, but future implementation also needs a simpler source of truth for what counts, what does not, and how fairness is preserved.
+Consequences: `docs/giveaway-rules-framework.md` now defines the preferred default rule set: one approved qualifying interaction per participant per month, approval before eligibility where moderation applies, manual overrides, anti-abuse handling, and multiple small winners instead of activity-based odds stacking.
+
+Date: 2026-04-24
+Decision: Plan for trusted commenters as a future moderation upgrade path.
+Context: Randy liked the idea of regular trusted participants being able to interact more naturally than first-time commenters, without opening comments fully from day one.
+Consequences: The comment and interaction planning docs now treat trusted commenter status as a likely future step after the initial moderated release, potentially allowing lighter review or selective auto-publishing while keeping manual override and trust revocation available.
+
+Date: 2026-04-24
+Decision: Design the future comment system around a staged dynamic backend rather than a static publish-and-deploy workflow.
+Context: Randy would be unlikely to use a comment system that required a site deploy every time a comment was approved. He prefers the more complex backend path if it can be built in smaller stages.
+Consequences: The comment plan now treats live private storage, server-side moderation, and deploy-free public approvals as the primary architecture. Simpler fully static publication is no longer the recommended default, though the rollout should still stay incremental and manually moderated at first.
+
+Date: 2026-04-24
+Decision: Keep basic commenting low-friction by using cookie continuity first, with email verification only when the system needs higher-confidence identity.
+Context: Randy wants to avoid accounts, passwords, and unnecessary friction. He is open to verification, but does not want every commenter to go through it up front if normal commenting can stay simple.
+Consequences: The first comment implementation uses unsigned cookie continuity only for low-stakes repeat-commenter convenience. The planning docs now reserve signed cookie continuity plus email verification for giveaway eligibility, trusted commenter promotion, suspicious cases, or any higher-confidence identity work.
+
+Date: 2026-04-24
+Decision: Build the first pass of the comment system now, but keep giveaway automation out of scope.
+Context: Randy is ready to start on v1 comments and is comfortable waiting on the giveaway layer until the interaction model is better understood.
+Consequences: The repo now includes an initial dynamic comment foundation in code: writing-post comments, private live storage, manual moderation, a private moderation page, first-party replies, and cookie-based continuity. Giveaway logic remains deferred.
+
+Date: 2026-04-24
+Decision: Keep rejected comments restorable and allow replies within a simple conversation layout.
+Context: Randy wanted the option to undo a rejection later if needed and wanted commenters to be able to reply to each other without the UI turning into a full forum.
+Consequences: The comment system now keeps rejected comments in storage with a reversible status instead of deleting them, and the public comment UI supports replies while keeping the conversation structure intentionally lightweight.
+
+Date: 2026-04-24
+Decision: Add moderation-side cleanup tools for published comments and whole post threads.
+Context: Once the first pass of the live comment system was tested, Randy wanted a practical way to remove production test comments without dropping into raw Netlify Blobs commands.
+Consequences: The moderation page now surfaces published comments, supports deleting an individual published comment thread, and includes a protected clear-by-post-slug action for wiping all comments on one writing post without a deploy.
+
+Date: 2026-04-24
+Decision: Plan the next moderation upgrade as a lightweight dashboard, not a heavier public-facing system.
+Context: Randy noticed that even a modest number of comments across a few posts would make the current single-page moderation flow harder to manage.
+Consequences: `docs/comment-moderation-dashboard-plan.md` now outlines the preferred next step: a small moderation inbox with clearer status views, per-post management, filters, and later commenter history, while keeping the reader-facing comment experience low-friction.
+
+Date: 2026-04-24
+Decision: Prioritize moderation upgrades around structure first, then post context, then history.
+Context: Randy wanted a concrete build sequence rather than just a broad moderation-dashboard concept.
+Consequences: The dashboard plan now recommends building in this order: clearer status modes first, then a `By post` index, then a post-specific moderation view, with search and commenter history later.
+
+Date: 2026-04-24
+Decision: Implement the first moderation dashboard build as an inbox-style status view.
+Context: The moderation page needed to stop feeling like several stacked queues while preserving the existing backend and moderation actions.
+Consequences: `/comments/moderate` now has status tabs for Needs review, Published, and Rejected, count badges for each status, and a simple post-slug filter. Approve, reject, restore, reply, delete, and clear-post actions remain on the same private moderation surface.

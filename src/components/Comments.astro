@@ -1,0 +1,540 @@
+---
+const { postSlug } = Astro.props as { postSlug: string };
+---
+
+<section class="comments-shell" data-post-slug={postSlug}>
+	<div class="comments-frame">
+		<header class="comments-header">
+			<div>
+				<p class="eyebrow">Comments</p>
+				<h2>Join the conversation</h2>
+			</div>
+			<p class="intro">
+				Thoughtful comments are welcome. New comments go through a quick review before they show up.
+			</p>
+		</header>
+
+		<div class="comments-list" aria-live="polite">
+			<p class="comments-loading">Loading comments...</p>
+		</div>
+
+		<form class="comment-form">
+			<div class="reply-state" hidden>
+				<p class="reply-label"></p>
+				<button class="cancel-reply secondary" type="button">Cancel reply</button>
+			</div>
+
+			<div class="field-row">
+				<label>
+					<span>Display name</span>
+					<input type="text" name="displayName" maxlength="80" required />
+				</label>
+
+				<label>
+					<span>Email</span>
+					<input type="email" name="email" maxlength="200" required />
+				</label>
+			</div>
+
+			<label>
+				<span>Comment</span>
+				<textarea name="comment" rows="6" maxlength="4000" required></textarea>
+			</label>
+
+			<label class="trap">
+				<span>Website</span>
+				<input type="text" name="website" tabindex="-1" autocomplete="off" />
+			</label>
+
+			<input type="hidden" name="postSlug" value={postSlug} />
+			<input type="hidden" name="parentCommentId" value="" />
+
+			<div class="form-actions">
+				<button type="submit">Submit comment</button>
+				<p class="form-status" aria-live="polite"></p>
+			</div>
+		</form>
+	</div>
+</section>
+
+<script is:inline>
+	const root = document.currentScript?.previousElementSibling;
+
+	if (root instanceof HTMLElement) {
+		const listEl = root.querySelector(".comments-list");
+		const form = root.querySelector(".comment-form");
+		const statusEl = root.querySelector(".form-status");
+		const postSlug = root.dataset.postSlug;
+		const replyStateEl = root.querySelector(".reply-state");
+		const replyLabelEl = root.querySelector(".reply-label");
+		const cancelReplyButton = root.querySelector(".cancel-reply");
+		const parentInput = root.querySelector('input[name="parentCommentId"]');
+		const textarea = root.querySelector('textarea[name="comment"]');
+
+		const formatDate = (value) =>
+			new Intl.DateTimeFormat("en", {
+				month: "long",
+				day: "numeric",
+				year: "numeric",
+				timeZone: "UTC",
+			}).format(new Date(value));
+
+		const escapeHtml = (value) =>
+			value
+				.replaceAll("&", "&amp;")
+				.replaceAll("<", "&lt;")
+				.replaceAll(">", "&gt;")
+				.replaceAll('"', "&quot;");
+
+		const buildTree = (comments) => {
+			const byParent = new Map();
+			const byId = new Map();
+
+			for (const comment of comments) {
+				byId.set(comment.commentId, comment);
+				const parentKey = comment.parentCommentId || "root";
+				const bucket = byParent.get(parentKey) || [];
+				bucket.push(comment);
+				byParent.set(parentKey, bucket);
+			}
+
+			const sortByDate = (a, b) =>
+				new Date(a.approvedAt || a.submittedAt).getTime() - new Date(b.approvedAt || b.submittedAt).getTime();
+
+			for (const bucket of byParent.values()) {
+				bucket.sort(sortByDate);
+			}
+
+			return { byParent, byId };
+		};
+
+		const renderThread = (comment, repliesByParent, commentById, depth = 0) => {
+			const replies = repliesByParent.get(comment.commentId) || [];
+			const parentComment = comment.parentCommentId ? commentById.get(comment.parentCommentId) : null;
+			const badge =
+				comment.authorRole === "owner" ? '<span class="comment-badge">Randy</span>' : "";
+			const replyButton = `<button class="reply-trigger secondary" type="button" data-comment-id="${comment.commentId}" data-display-name="${escapeHtml(comment.displayName)}">Reply</button>`;
+
+			return `
+				<article class="comment-card ${depth > 0 ? "comment-reply" : "comment-root"}">
+					<header class="comment-meta">
+						<div class="comment-author">
+							<strong>${escapeHtml(comment.displayName)}</strong>
+							${badge}
+						</div>
+						<time datetime="${comment.approvedAt ?? comment.submittedAt}">${formatDate(comment.approvedAt ?? comment.submittedAt)}</time>
+					</header>
+					${
+						parentComment
+							? `<p class="reply-to">Replying to ${escapeHtml(parentComment.displayName)}</p>`
+							: ""
+					}
+					<div class="comment-body">
+						<p>${escapeHtml(comment.body).replaceAll("\n", "<br />")}</p>
+					</div>
+					<div class="comment-actions">
+						${replyButton}
+					</div>
+					${
+						replies.length
+							? `<div class="comment-children">${replies
+									.map((reply) => renderThread(reply, repliesByParent, commentById, depth + 1))
+									.join("")}</div>`
+							: ""
+					}
+				</article>
+			`;
+		};
+
+		const clearReplyState = () => {
+			if (replyStateEl instanceof HTMLElement) replyStateEl.hidden = true;
+			if (replyLabelEl instanceof HTMLElement) replyLabelEl.textContent = "";
+			if (parentInput instanceof HTMLInputElement) parentInput.value = "";
+		};
+
+		const setReplyState = ({ commentId, displayName }) => {
+			if (!(replyStateEl instanceof HTMLElement) || !(replyLabelEl instanceof HTMLElement)) return;
+			replyStateEl.hidden = false;
+			replyLabelEl.textContent = `Replying to ${displayName}`;
+			if (parentInput instanceof HTMLInputElement) parentInput.value = commentId;
+			if (textarea instanceof HTMLTextAreaElement) textarea.focus();
+		};
+
+		const renderComments = (comments) => {
+			if (!(listEl instanceof HTMLElement)) return;
+
+			if (!comments.length) {
+				listEl.innerHTML =
+					'<div class="comments-empty"><p>No comments yet.</p><p>Be the first to add something thoughtful.</p></div>';
+				return;
+			}
+
+			const { byParent: repliesByParent, byId: commentById } = buildTree(comments);
+			const roots = repliesByParent.get("root") || [];
+
+			listEl.innerHTML = `
+				<div class="comments-stack">
+					${roots.map((comment) => renderThread(comment, repliesByParent, commentById)).join("")}
+				</div>
+			`;
+		};
+
+		const loadComments = async () => {
+			if (!(listEl instanceof HTMLElement) || !postSlug) return;
+
+			try {
+				const response = await fetch(`/api/comments?postSlug=${encodeURIComponent(postSlug)}`);
+				if (!response.ok) throw new Error("Could not load comments.");
+
+				const data = await response.json();
+				renderComments(Array.isArray(data.comments) ? data.comments : []);
+			} catch (_error) {
+				listEl.innerHTML =
+					'<div class="comments-empty"><p>Comments are unavailable right now.</p><p>Try again in a bit.</p></div>';
+			}
+		};
+
+		if (form instanceof HTMLFormElement && statusEl instanceof HTMLElement) {
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				statusEl.textContent = "Sending...";
+
+				const formData = new FormData(form);
+				const payload = {
+					displayName: String(formData.get("displayName") ?? ""),
+					email: String(formData.get("email") ?? ""),
+					comment: String(formData.get("comment") ?? ""),
+					postSlug: String(formData.get("postSlug") ?? ""),
+					parentCommentId: String(formData.get("parentCommentId") ?? ""),
+					website: String(formData.get("website") ?? ""),
+				};
+
+				try {
+					const response = await fetch("/api/comments", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload),
+					});
+
+					const data = await response.json();
+					if (!response.ok) {
+						throw new Error(data.error || "Comment could not be submitted.");
+					}
+
+					form.reset();
+					clearReplyState();
+					statusEl.textContent = "Thanks. Your comment is in the review queue.";
+				} catch (error) {
+					statusEl.textContent =
+						error instanceof Error ? error.message : "Comment could not be submitted.";
+				}
+			});
+		}
+
+		listEl?.addEventListener("click", (event) => {
+			const target = event.target;
+			if (!(target instanceof HTMLButtonElement)) return;
+			if (!target.classList.contains("reply-trigger")) return;
+
+			const commentId = target.dataset.commentId;
+			const displayName = target.dataset.displayName;
+			if (!commentId || !displayName) return;
+
+			setReplyState({ commentId, displayName });
+		});
+
+		cancelReplyButton?.addEventListener("click", () => {
+			clearReplyState();
+		});
+
+		loadComments();
+	}
+</script>
+
+<style>
+	.comments-shell {
+		margin-top: clamp(58px, 8vw, 96px);
+	}
+
+	.comments-frame {
+		padding: clamp(24px, 4vw, 32px);
+		border: 2px solid var(--ink);
+		background:
+			linear-gradient(135deg, rgba(242, 189, 52, 0.16), rgba(31, 111, 139, 0.08)),
+			rgba(255, 255, 255, 0.54);
+		box-shadow: 10px 10px 0 rgba(32, 23, 19, 0.08);
+	}
+
+	.comments-header {
+		display: grid;
+		gap: 16px;
+		margin-bottom: 28px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid rgba(32, 23, 19, 0.16);
+	}
+
+	.eyebrow {
+		margin: 0 0 10px;
+		font-size: 0.84rem;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	h2 {
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(2rem, 3vw, 2.8rem);
+		line-height: 0.98;
+	}
+
+	.intro {
+		max-width: 620px;
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.7;
+	}
+
+	.comments-list {
+		margin-bottom: 24px;
+	}
+
+	:global(.comments-shell .comments-stack) {
+		display: grid;
+		gap: 28px;
+	}
+
+	:global(.comments-shell .comments-loading),
+	:global(.comments-shell .comments-empty) {
+		padding: 18px 20px;
+		border: 1px solid rgba(32, 23, 19, 0.16);
+		background: rgba(255, 255, 255, 0.62);
+	}
+
+	:global(.comments-shell .comments-empty p) {
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	:global(.comments-shell .comments-empty p + p) {
+		margin-top: 6px;
+	}
+
+	:global(.comments-shell .comment-card) {
+		padding: 22px 24px;
+		border: 2px solid rgba(32, 23, 19, 0.24);
+		background: rgba(255, 255, 255, 0.9);
+	}
+
+	:global(.comments-shell .comment-root) {
+		background:
+			linear-gradient(180deg, rgba(242, 189, 52, 0.08), rgba(255, 255, 255, 0.94)),
+			rgba(255, 255, 255, 0.9);
+		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.08);
+	}
+
+	:global(.comments-shell .comment-reply) {
+		margin-top: 16px;
+		margin-left: clamp(12px, 2.5vw, 28px);
+		border: 2px solid rgba(31, 111, 139, 0.24);
+		border-left: 8px solid rgba(31, 111, 139, 0.58);
+		background:
+			linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.96)),
+			rgba(255, 255, 255, 0.88);
+		box-shadow: none;
+	}
+
+	:global(.comments-shell .comment-children) {
+		margin-top: 16px;
+		padding-left: 8px;
+		border-left: 2px dashed rgba(31, 111, 139, 0.25);
+	}
+
+	:global(.comments-shell .comment-meta) {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 14px;
+		align-items: flex-start;
+		padding-bottom: 12px;
+		border-bottom: 1px solid rgba(32, 23, 19, 0.12);
+	}
+
+	:global(.comments-shell .comment-author) {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	:global(.comments-shell .comment-meta strong) {
+		font-size: 1rem;
+	}
+
+	:global(.comments-shell .comment-meta time) {
+		color: rgba(32, 23, 19, 0.68);
+		font-size: 0.92rem;
+		white-space: nowrap;
+	}
+
+	:global(.comments-shell .comment-badge) {
+		display: inline-flex;
+		padding: 3px 7px;
+		background: var(--yellow);
+		border: 1px solid var(--ink);
+		font-size: 0.72rem;
+		font-weight: 900;
+		text-transform: uppercase;
+	}
+
+	:global(.comments-shell .comment-body p) {
+		margin: 0;
+		line-height: 1.72;
+	}
+
+	:global(.comments-shell .reply-to) {
+		display: inline-flex;
+		width: fit-content;
+		margin: 0 0 14px;
+		padding: 4px 8px;
+		border: 1px solid rgba(31, 111, 139, 0.28);
+		background: rgba(31, 111, 139, 0.1);
+		font-size: 0.86rem;
+		font-weight: 800;
+		color: rgba(31, 111, 139, 0.9);
+	}
+
+	:global(.comments-shell .comment-actions) {
+		margin-top: 14px;
+	}
+
+	:global(.comments-shell .comment-actions:empty) {
+		display: none;
+	}
+
+	.comment-form {
+		display: grid;
+		gap: 16px;
+		padding: 22px;
+		border: 2px solid var(--ink);
+		background:
+			repeating-linear-gradient(-18deg, rgba(242, 189, 52, 0.12) 0 7px, transparent 7px 20px),
+			rgba(255, 255, 255, 0.66);
+	}
+
+	.reply-state {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 14px;
+		border: 1px solid rgba(32, 23, 19, 0.16);
+		background: rgba(31, 111, 139, 0.08);
+	}
+
+	.reply-state[hidden] {
+		display: none;
+	}
+
+	.reply-label {
+		margin: 0;
+		font-size: 0.94rem;
+		font-weight: 700;
+	}
+
+	.field-row {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 16px;
+	}
+
+	label {
+		display: grid;
+		gap: 8px;
+		font-weight: 700;
+	}
+
+	label span {
+		font-size: 0.92rem;
+	}
+
+	input,
+	textarea,
+	button {
+		font: inherit;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		padding: 12px 14px;
+		border: 1px solid rgba(32, 23, 19, 0.26);
+		border-radius: 0;
+		background: rgba(255, 255, 255, 0.94);
+	}
+
+	textarea {
+		resize: vertical;
+		min-height: 150px;
+	}
+
+	.trap {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.form-actions {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+
+	button {
+		padding: 11px 16px;
+		border: 2px solid var(--ink);
+		background: var(--ink);
+		color: white;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	button.secondary,
+	:global(.comments-shell button.secondary) {
+		background: transparent;
+		color: var(--ink);
+	}
+
+	.form-status {
+		margin: 0;
+		font-size: 0.94rem;
+		font-weight: 700;
+	}
+
+	@media (max-width: 720px) {
+		.comments-frame {
+			padding: 20px;
+		}
+
+		.field-row {
+			grid-template-columns: 1fr;
+		}
+
+		:global(.comments-shell .comment-meta),
+		.reply-state {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		:global(.comments-shell .comment-meta time) {
+			white-space: normal;
+		}
+
+		:global(.comments-shell .comment-reply) {
+			margin-left: 10px;
+		}
+	}
+</style>

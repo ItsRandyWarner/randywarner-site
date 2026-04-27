@@ -18,6 +18,8 @@ This repository is an Astro 6 static site for Randy Warner's personal creative h
   - `/podcasts`
   - `/podcasts/request`
   - `/podcasts/request/thanks`
+- Private/admin route implemented in code:
+  - `/comments/moderate`
 - Shared layout/components:
   - `src/layouts/BaseLayout.astro`
   - `src/components/SiteHeader.astro`
@@ -29,7 +31,12 @@ This repository is an Astro 6 static site for Randy Warner's personal creative h
 - Styling approach:
   - Astro-scoped CSS and shared global variables in `BaseLayout`
   - Tailwind intentionally deferred
-  - Current visual system uses bold editorial type, hand-built cards/panels, restrained section spacing, and a warm gridded paper background
+- Current visual system uses bold editorial type, hand-built cards/panels, restrained section spacing, and a warm gridded paper background
+- Comment system status:
+  - initial dynamic v1 comment foundation is implemented in code
+  - approved comments are intended to render live on writing posts without deploys
+  - moderation uses a private route plus server-side endpoints
+  - giveaway logic is still deferred
 - Static assets:
   - RW favicon and Apple touch icon assets live in `public/`
   - Social preview artwork lives in `public/social-preview.svg` and `public/social-preview.png`
@@ -45,6 +52,7 @@ The site should feel like a personal creative hub centered on creativity, curios
 - Plan the next stage of content and site depth.
 - Refine the copy of `/now` while keeping it current through the light freshness plan and reminder cadence.
 - Keep `/now` discoverable without promoting it into primary navigation too early.
+- Finish runtime QA of the new comment system before any deploy.
 - Use Netlify preview deploys before publishing meaningful changes.
 - Keep doing visual QA after spacing, type, or layout changes.
 
@@ -55,3 +63,9 @@ The site should feel like a personal creative hub centered on creativity, curios
 - Keep the implementation maintainable for a user with basic coding/design experience.
 - Avoid sales-funnel, course, or overly professional portfolio energy.
 - Do not push or deploy changes unless Randy explicitly asks.
+
+## Working Habits
+
+- Before making a meaningful site change, check the most relevant planning docs so implementation stays aligned with the current direction.
+- After making a meaningful site change, do a quick documentation pass and update any planning notes that are now out of date.
+- Small typo fixes or tiny copy tweaks do not need a full doc sweep unless they change the direction, structure, or workflow.

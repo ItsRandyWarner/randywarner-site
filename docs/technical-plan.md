@@ -20,6 +20,7 @@ The site is a mostly static Astro application:
 - `/podcasts/request` - implemented shared podcast request form.
 - `/podcasts/request/thanks` - implemented form success page.
 - `/now` - implemented living snapshot page, manually authored and intentionally kept outside primary navigation for now.
+- `/comments/moderate` - private moderation page for comment review and first-party replies.
 - `/about` - possible later page.
 - `/contact` - possible later page.
 - `/photos` - future photography page.
@@ -41,6 +42,10 @@ Podcast content should start as manually curated page content for the `/podcasts
 Podcast request forms use Netlify Forms. The current implementation has a dedicated `/podcasts/request` page linked from `/podcasts`, with request-type-specific fields shown conditionally. All possible fields remain in the static form markup so Netlify can detect and accept submissions.
 
 Netlify project form detection must stay enabled. If `processing_settings.ignore_html_forms` is true in Netlify, form submissions will return a Netlify 404 even when the thank-you page exists.
+
+The comment system is documented in `docs/comment-system-plan.md`. The current first pass is implemented in code as a staged dynamic architecture: private live comment storage, server-side submission and moderation, approved comments rendered without redeploying the site, Randy's own public replies supported through the moderation flow, and moderation-side cleanup controls for deleting published comments or clearing one post's thread. Basic commenting does not require full upfront verification; the preferred path is cookie-based continuity for normal use, with email verification reserved for giveaway eligibility, trusted commenter promotion, or suspicious cases. The next likely moderation evolution is outlined separately in `docs/comment-moderation-dashboard-plan.md`.
+
+The broader future interaction model is documented in `docs/interaction-and-giveaway-plan.md`. That plan separates public interaction, participant identity, rule evaluation, and giveaway entry tracking so the site can grow into lightweight community mechanics without taking on full accounts or a heavy platform architecture too early. The current preferred giveaway direction is one approved qualifying interaction per participant per month, with multiple small winners rather than volume-based odds. The actual rule shape is further defined in `docs/giveaway-rules-framework.md`.
 
 ## Technology Choices
 
@@ -74,6 +79,10 @@ The homepage also includes a slim callout to `/now` above the shared footer. Thi
 3. Keep `/now` manually authored unless a real update workflow need appears.
 4. Revisit `/now` on a light 2 to 4 week rhythm, or sooner when Randy's real current focus changes.
 5. Run `npm run build` before publishing changes.
+6. Before meaningful work, review the most relevant planning docs.
+7. After meaningful work, do a quick documentation consistency pass and update any stale planning notes.
+8. Keep comments limited to published writing posts, keep moderation manual, and preserve live private storage so approved comments do not require deploys.
+9. Use `npx netlify dev` for local runtime testing of comment endpoints and Blobs-backed storage.
 
 ## Quality Gates
 
@@ -111,7 +120,15 @@ Production deployment workflow:
 
 Before production deploys that include form changes, confirm Netlify has registered the form and submit one test entry on a preview deploy.
 
+Before production deploys that include comment-system changes:
+
+1. Set `COMMENT_MODERATION_SECRET` in Netlify and in local development.
+2. Test comment submission and comment rendering through `netlify dev` or a preview deploy.
+3. Test the private moderation page and approval/reject flow on preview before publishing.
+
 ## Risks
 
 - Homepage copy may continue to evolve after launch as Randy's voice settles.
 - The visual system is emerging but not a full design system; repeated button and panel styles are still mostly page-local.
+- Safari may still show the Astro favicon on the homepage even though shared favicon files and head tags point to the RW icon; revisit favicon asset/caching behavior later.
+- A future dynamic comment system could create moderation and architecture burden if it goes live before there is a clear approval workflow, enough writing depth, and a realistic backend plan.

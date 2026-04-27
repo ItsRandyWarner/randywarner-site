@@ -1,0 +1,711 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Comment Moderation | Randy Warner"
+	description="Private moderation queue for writing comments."
+>
+	<main class="moderation-page">
+		<header class="page-header">
+			<p class="eyebrow">Private</p>
+			<h1>Comment moderation</h1>
+			<p>
+				This page is intentionally unlisted. Enter the moderation secret to review pending comments
+				and post your own replies.
+			</p>
+		</header>
+
+		<section class="panel auth-panel">
+			<label>
+				<span>Moderation secret</span>
+				<input type="password" class="secret-input" autocomplete="current-password" />
+			</label>
+			<div class="panel-actions">
+				<button class="save-secret">Unlock queue</button>
+				<button class="clear-secret secondary" type="button">Forget secret</button>
+			</div>
+			<p class="auth-status" aria-live="polite"></p>
+		</section>
+
+		<section class="panel reply-panel">
+			<h2>Post a reply</h2>
+			<form class="reply-form">
+				<label>
+					<span>Post slug</span>
+					<input type="text" name="postSlug" placeholder="why-think-deep" required />
+				</label>
+				<input type="hidden" name="parentCommentId" value="" />
+				<label>
+					<span>Display name</span>
+					<input type="text" name="displayName" value="Randy Warner" required />
+				</label>
+				<label>
+					<span>Reply</span>
+					<textarea name="body" rows="5" required></textarea>
+				</label>
+				<div class="panel-actions">
+					<button type="submit">Post reply</button>
+				</div>
+				<p class="reply-status" aria-live="polite"></p>
+			</form>
+		</section>
+
+		<section class="panel inbox-panel">
+			<div class="inbox-header">
+				<div>
+					<h2>Moderation inbox</h2>
+					<p class="inbox-description">Switch status views or narrow the inbox to one writing post.</p>
+				</div>
+				<button class="refresh secondary" type="button">Refresh</button>
+			</div>
+			<div class="inbox-controls">
+				<div class="status-tabs" role="tablist" aria-label="Comment status views">
+					<button class="status-tab is-active" type="button" data-status-view="pending" role="tab" aria-selected="true">
+						Needs review <span class="status-count" data-status-count="pending">0</span>
+					</button>
+					<button class="status-tab secondary" type="button" data-status-view="approved" role="tab" aria-selected="false">
+						Published <span class="status-count" data-status-count="approved">0</span>
+					</button>
+					<button class="status-tab secondary" type="button" data-status-view="rejected" role="tab" aria-selected="false">
+						Rejected <span class="status-count" data-status-count="rejected">0</span>
+					</button>
+				</div>
+				<label class="post-filter">
+					<span>Post slug</span>
+					<input type="text" class="post-filter-input" placeholder="all posts" autocomplete="off" />
+				</label>
+			</div>
+			<div class="inbox-view-summary" aria-live="polite">Unlock the queue to load comments.</div>
+			<div class="inbox-list" aria-live="polite">
+				<p class="queue-empty">Unlock the queue to load comments.</p>
+			</div>
+		</section>
+
+		<section class="panel danger-panel">
+			<h2>Danger zone</h2>
+			<p>Clear every comment for a post slug in one shot when you want a clean slate.</p>
+			<form class="clear-post-form">
+				<label>
+					<span>Post slug</span>
+					<input type="text" name="postSlug" placeholder="single-ply-ftw" required />
+				</label>
+				<div class="panel-actions">
+					<button type="submit" class="danger">Clear all comments for this post</button>
+				</div>
+				<p class="clear-post-status" aria-live="polite"></p>
+			</form>
+		</section>
+	</main>
+</BaseLayout>
+
+<script is:inline>
+	const storageKey = "rw-comment-moderation-secret";
+	const page = document.querySelector(".moderation-page");
+
+	if (page instanceof HTMLElement) {
+		const secretInput = page.querySelector(".secret-input");
+		const saveButton = page.querySelector(".save-secret");
+		const clearButton = page.querySelector(".clear-secret");
+		const authStatus = page.querySelector(".auth-status");
+		const replyForm = page.querySelector(".reply-form");
+		const replyStatus = page.querySelector(".reply-status");
+		const refreshButton = page.querySelector(".refresh");
+		const inboxList = page.querySelector(".inbox-list");
+		const inboxSummary = page.querySelector(".inbox-view-summary");
+		const statusTabs = page.querySelectorAll(".status-tab");
+		const statusCounts = page.querySelectorAll("[data-status-count]");
+		const postFilterInput = page.querySelector(".post-filter-input");
+		const clearPostForm = page.querySelector(".clear-post-form");
+		const clearPostStatus = page.querySelector(".clear-post-status");
+
+		let moderationSecret = localStorage.getItem(storageKey) ?? "";
+		let activeStatus = "pending";
+		let commentsByStatus = {
+			pending: [],
+			approved: [],
+			rejected: [],
+		};
+
+		if (secretInput instanceof HTMLInputElement && moderationSecret) {
+			secretInput.value = moderationSecret;
+		}
+
+		const setAuthStatus = (message) => {
+			if (authStatus instanceof HTMLElement) authStatus.textContent = message;
+		};
+
+		const request = async (url, options = {}) => {
+			if (!moderationSecret) {
+				throw new Error("Add the moderation secret first.");
+			}
+
+			const response = await fetch(url, {
+				...options,
+				headers: {
+					"Content-Type": "application/json",
+					"x-moderation-secret": moderationSecret,
+					...(options.headers || {}),
+				},
+			});
+
+			const data = await response.json().catch(() => ({}));
+			if (!response.ok) {
+				throw new Error(data.error || "Request failed.");
+			}
+
+			return data;
+		};
+
+		const escapeHtml = (value) =>
+			value
+				.replaceAll("&", "&amp;")
+				.replaceAll("<", "&lt;")
+				.replaceAll(">", "&gt;")
+				.replaceAll('"', "&quot;");
+
+		const formatDate = (value) =>
+			new Intl.DateTimeFormat("en", {
+				month: "short",
+				day: "numeric",
+				year: "numeric",
+				timeZone: "UTC",
+			}).format(new Date(value));
+
+		const renderCards = (comments, options = {}) => {
+			const { emptyText = "Nothing here.", mode = "pending" } = options;
+
+			if (!comments.length) {
+				return `<p class="queue-empty">${emptyText}</p>`;
+			}
+
+			return comments
+				.map(
+					(comment) => `
+						<article class="queue-card" data-comment-id="${comment.commentId}" data-post-slug="${comment.postSlug}">
+							<div class="queue-meta">
+								<div>
+									<strong>${escapeHtml(comment.displayName)}</strong>
+									<span>${escapeHtml(comment.postSlug)}${comment.parentCommentId ? " • reply" : ""}</span>
+								</div>
+								<time datetime="${comment.approvedAt ?? comment.rejectedAt ?? comment.submittedAt}">${formatDate(comment.approvedAt ?? comment.rejectedAt ?? comment.submittedAt)}</time>
+							</div>
+							${
+								comment.parentPreview
+									? `<div class="parent-preview">
+											<p class="parent-label">Replying to ${escapeHtml(comment.parentPreview.displayName)}</p>
+											<p>${escapeHtml(comment.parentPreview.body).replaceAll("\n", "<br />")}</p>
+										</div>`
+									: ""
+							}
+							<p>${escapeHtml(comment.body).replaceAll("\n", "<br />")}</p>
+							<div class="queue-actions">
+								${
+									mode === "rejected"
+										? '<button class="restore">Restore to pending</button>'
+										: mode === "approved"
+											? '<button class="prefill-reply secondary">Reply</button><button class="delete danger-secondary">Delete</button>'
+											: '<button class="approve">Approve</button><button class="reject secondary">Reject</button><button class="prefill-reply secondary">Reply</button>'
+								}
+							</div>
+						</article>
+					`,
+				)
+				.join("");
+		};
+
+		const statusLabels = {
+			pending: "Needs review",
+			approved: "Published",
+			rejected: "Rejected",
+		};
+
+		const emptyTextByStatus = {
+			pending: "No comments need review right now.",
+			approved: "No published comments match this view.",
+			rejected: "No rejected comments match this view.",
+		};
+
+		const getPostFilter = () =>
+			postFilterInput instanceof HTMLInputElement ? postFilterInput.value.trim().toLowerCase() : "";
+
+		const filteredComments = () => {
+			const postFilter = getPostFilter();
+			const comments = commentsByStatus[activeStatus] ?? [];
+
+			if (!postFilter) return comments;
+
+			return comments.filter((comment) => String(comment.postSlug ?? "").toLowerCase().includes(postFilter));
+		};
+
+		const updateStatusCounts = () => {
+			statusCounts.forEach((countEl) => {
+				if (!(countEl instanceof HTMLElement)) return;
+				const status = countEl.dataset.statusCount;
+				countEl.textContent = String(commentsByStatus[status]?.length ?? 0);
+			});
+		};
+
+		const updateActiveTab = () => {
+			statusTabs.forEach((tab) => {
+				if (!(tab instanceof HTMLButtonElement)) return;
+				const isActive = tab.dataset.statusView === activeStatus;
+				tab.classList.toggle("is-active", isActive);
+				tab.classList.toggle("secondary", !isActive);
+				tab.setAttribute("aria-selected", String(isActive));
+			});
+		};
+
+		const renderInbox = () => {
+			if (!(inboxList instanceof HTMLElement)) return;
+
+			updateStatusCounts();
+			updateActiveTab();
+
+			const postFilter = getPostFilter();
+			const comments = filteredComments();
+			const totalCount = commentsByStatus[activeStatus]?.length ?? 0;
+
+			if (inboxSummary instanceof HTMLElement) {
+				const filterText = postFilter ? ` for posts matching "${postFilter}"` : "";
+				inboxSummary.textContent = `${statusLabels[activeStatus]}: showing ${comments.length} of ${totalCount}${filterText}.`;
+			}
+
+			inboxList.innerHTML = renderCards(comments, {
+				emptyText: emptyTextByStatus[activeStatus],
+				mode: activeStatus,
+			});
+		};
+
+		const loadQueue = async () => {
+			if (!(inboxList instanceof HTMLElement)) return;
+
+			if (!moderationSecret) {
+				commentsByStatus = { pending: [], approved: [], rejected: [] };
+				if (inboxSummary instanceof HTMLElement) {
+					inboxSummary.textContent = "Unlock the queue to load comments.";
+				}
+				inboxList.innerHTML = '<p class="queue-empty">Unlock the queue to load comments.</p>';
+				updateStatusCounts();
+				return;
+			}
+
+			if (inboxSummary instanceof HTMLElement) {
+				inboxSummary.textContent = "Loading comments...";
+			}
+			inboxList.innerHTML = '<p class="queue-empty">Loading comments...</p>';
+
+			try {
+				const data = await request("/api/comments/moderate");
+				commentsByStatus = {
+					pending: Array.isArray(data.pendingComments) ? data.pendingComments : [],
+					approved: Array.isArray(data.approvedComments) ? data.approvedComments : [],
+					rejected: Array.isArray(data.rejectedComments) ? data.rejectedComments : [],
+				};
+				renderInbox();
+				setAuthStatus("Queue unlocked.");
+			} catch (error) {
+				commentsByStatus = { pending: [], approved: [], rejected: [] };
+				inboxList.innerHTML = '<p class="queue-empty">Could not load the queue.</p>';
+				if (inboxSummary instanceof HTMLElement) {
+					inboxSummary.textContent = "Could not load comments.";
+				}
+				updateStatusCounts();
+				setAuthStatus(error instanceof Error ? error.message : "Could not load the queue.");
+			}
+		};
+
+		saveButton?.addEventListener("click", async () => {
+			if (!(secretInput instanceof HTMLInputElement)) return;
+			moderationSecret = secretInput.value.trim();
+			localStorage.setItem(storageKey, moderationSecret);
+			await loadQueue();
+		});
+
+		clearButton?.addEventListener("click", () => {
+			moderationSecret = "";
+			localStorage.removeItem(storageKey);
+			if (secretInput instanceof HTMLInputElement) secretInput.value = "";
+			setAuthStatus("Secret cleared.");
+			commentsByStatus = { pending: [], approved: [], rejected: [] };
+			if (inboxSummary instanceof HTMLElement) inboxSummary.textContent = "Unlock the queue to load comments.";
+			if (inboxList instanceof HTMLElement) {
+				inboxList.innerHTML = '<p class="queue-empty">Unlock the queue to load comments.</p>';
+			}
+			updateStatusCounts();
+		});
+
+		refreshButton?.addEventListener("click", () => {
+			loadQueue();
+		});
+
+		statusTabs.forEach((tab) => {
+			tab.addEventListener("click", () => {
+				if (!(tab instanceof HTMLButtonElement)) return;
+				const status = tab.dataset.statusView;
+				if (!status || !(status in commentsByStatus)) return;
+				activeStatus = status;
+				renderInbox();
+			});
+		});
+
+		postFilterInput?.addEventListener("input", () => {
+			renderInbox();
+		});
+
+		const handleQueueAction = async (target) => {
+			if (!(target instanceof HTMLButtonElement)) return;
+
+			const card = target.closest(".queue-card");
+			if (!(card instanceof HTMLElement)) return;
+
+			const commentId = card.dataset.commentId;
+			const postSlug = card.dataset.postSlug;
+			if (!commentId || !postSlug) return;
+
+			if (target.classList.contains("prefill-reply")) {
+				const slugInput = page.querySelector('input[name="postSlug"]');
+				if (slugInput instanceof HTMLInputElement) slugInput.value = postSlug;
+				const parentInput = page.querySelector('input[name="parentCommentId"]');
+				if (parentInput instanceof HTMLInputElement) parentInput.value = commentId;
+				const textarea = page.querySelector('textarea[name="body"]');
+				if (textarea instanceof HTMLTextAreaElement) textarea.focus();
+				return;
+			}
+
+			let action = "";
+			if (target.classList.contains("approve")) action = "approve";
+			if (target.classList.contains("reject")) action = "reject";
+			if (target.classList.contains("restore")) action = "restore";
+			if (target.classList.contains("delete")) action = "delete";
+			if (!action) return;
+			target.disabled = true;
+
+			try {
+				if (action === "delete") {
+					const confirmed = window.confirm("Delete this comment? Any replies underneath it will be deleted too.");
+					if (!confirmed) {
+						target.disabled = false;
+						return;
+					}
+				}
+
+				await request("/api/comments/moderate", {
+					method: "POST",
+					body: JSON.stringify({ action, commentId, postSlug }),
+				});
+				await loadQueue();
+			} catch (error) {
+				setAuthStatus(error instanceof Error ? error.message : "Could not update comment.");
+				target.disabled = false;
+			}
+		};
+
+		inboxList?.addEventListener("click", async (event) => {
+			await handleQueueAction(event.target);
+		});
+
+		replyForm?.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			if (!(replyForm instanceof HTMLFormElement) || !(replyStatus instanceof HTMLElement)) return;
+
+			replyStatus.textContent = "Posting reply...";
+			const formData = new FormData(replyForm);
+
+			try {
+				await request("/api/comments/moderate", {
+					method: "POST",
+					body: JSON.stringify({
+						action: "reply",
+						postSlug: String(formData.get("postSlug") ?? ""),
+						displayName: String(formData.get("displayName") ?? ""),
+						body: String(formData.get("body") ?? ""),
+						parentCommentId: String(formData.get("parentCommentId") ?? ""),
+					}),
+				});
+				replyForm.reset();
+				const displayNameInput = replyForm.querySelector('input[name="displayName"]');
+				if (displayNameInput instanceof HTMLInputElement) displayNameInput.value = "Randy Warner";
+				const parentInput = replyForm.querySelector('input[name="parentCommentId"]');
+				if (parentInput instanceof HTMLInputElement) parentInput.value = "";
+				replyStatus.textContent = "Reply posted.";
+				await loadQueue();
+			} catch (error) {
+				replyStatus.textContent = error instanceof Error ? error.message : "Could not post reply.";
+			}
+		});
+
+		clearPostForm?.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			if (!(clearPostForm instanceof HTMLFormElement) || !(clearPostStatus instanceof HTMLElement)) return;
+
+			const formData = new FormData(clearPostForm);
+			const postSlug = String(formData.get("postSlug") ?? "").trim();
+			if (!postSlug) return;
+
+			const confirmed = window.confirm(
+				`Delete every comment for "${postSlug}"? This removes pending, approved, and rejected comments for that post.`,
+			);
+			if (!confirmed) return;
+
+			clearPostStatus.textContent = "Clearing comments...";
+
+			try {
+				const data = await request("/api/comments/moderate", {
+					method: "POST",
+					body: JSON.stringify({
+						action: "clear_post",
+						postSlug,
+					}),
+				});
+				clearPostStatus.textContent = `Deleted ${data.deletedCount ?? 0} comment${data.deletedCount === 1 ? "" : "s"} from ${postSlug}.`;
+				await loadQueue();
+			} catch (error) {
+				clearPostStatus.textContent =
+					error instanceof Error ? error.message : "Could not clear comments for that post.";
+			}
+		});
+
+		if (moderationSecret) {
+			loadQueue();
+		}
+	}
+</script>
+
+<style>
+	.moderation-page {
+		width: min(980px, calc(100% - 32px));
+		margin: 0 auto;
+		padding: clamp(40px, 8vw, 88px) 0 72px;
+		display: grid;
+		gap: 24px;
+	}
+
+	.page-header h1,
+	.inbox-panel h2,
+	.reply-panel h2,
+	.danger-panel h2 {
+		margin: 0;
+		font-family: Georgia, "Times New Roman", serif;
+		line-height: 1;
+	}
+
+	.page-header p:last-child {
+		max-width: 700px;
+		margin: 16px 0 0;
+		line-height: 1.7;
+	}
+
+	.eyebrow {
+		margin: 0 0 10px;
+		font-size: 0.84rem;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.panel {
+		padding: 24px;
+		border: 2px solid var(--ink);
+		background: rgba(255, 255, 255, 0.54);
+		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.08);
+	}
+
+	.auth-panel,
+	.reply-form,
+	.clear-post-form,
+	.danger-panel,
+	.inbox-panel {
+		display: grid;
+		gap: 16px;
+	}
+
+	.panel label {
+		display: grid;
+		gap: 8px;
+		font-weight: 700;
+	}
+
+	.panel input,
+	.panel textarea,
+	.panel button {
+		font: inherit;
+	}
+
+	.panel input,
+	.panel textarea {
+		width: 100%;
+		padding: 12px 14px;
+		border: 1px solid rgba(32, 23, 19, 0.3);
+		background: rgba(255, 255, 255, 0.92);
+	}
+
+	.panel-actions,
+	.queue-actions,
+	.inbox-header,
+	.inbox-controls {
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.panel button {
+		padding: 11px 16px;
+		border: 2px solid var(--ink);
+		background: var(--ink);
+		color: white;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.panel button.secondary {
+		background: transparent;
+		color: var(--ink);
+	}
+
+	.inbox-description,
+	.danger-panel > p {
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	.inbox-description,
+	.inbox-view-summary {
+		color: rgba(32, 23, 19, 0.72);
+	}
+
+	.panel button.danger {
+		border-color: #8a231f;
+		background: #8a231f;
+	}
+
+	.auth-status,
+	.reply-status,
+	.clear-post-status,
+	.queue-empty,
+	.inbox-view-summary {
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	.status-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.panel .status-tab {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.panel .status-tab.is-active {
+		background: var(--ink);
+		color: white;
+	}
+
+	.status-count {
+		min-width: 2ch;
+		padding: 2px 7px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.84);
+		color: var(--ink);
+		font-size: 0.82rem;
+		line-height: 1.3;
+		text-align: center;
+	}
+
+	.panel .status-tab.secondary .status-count {
+		background: rgba(32, 23, 19, 0.08);
+	}
+
+	.post-filter {
+		width: min(260px, 100%);
+	}
+
+	.inbox-list {
+		display: grid;
+		gap: 16px;
+	}
+
+	:global(.moderation-page .queue-card) {
+		padding: 18px;
+		border: 1px solid var(--border);
+		background: rgba(255, 255, 255, 0.72);
+	}
+
+	:global(.moderation-page .queue-card p) {
+		margin: 14px 0;
+		line-height: 1.65;
+	}
+
+	:global(.moderation-page .queue-card .danger-secondary) {
+		padding: 11px 16px;
+		border: 2px solid #8a231f;
+		background: #8a231f;
+		color: white;
+		font: inherit;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	:global(.moderation-page .parent-preview) {
+		margin-top: 14px;
+		padding: 12px 14px;
+		border: 1px solid rgba(31, 111, 139, 0.28);
+		border-left: 6px solid rgba(31, 111, 139, 0.55);
+		background: linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.7));
+	}
+
+	:global(.moderation-page .parent-preview p) {
+		margin: 0;
+	}
+
+	:global(.moderation-page .parent-preview p + p) {
+		margin-top: 6px;
+	}
+
+	:global(.moderation-page .parent-label) {
+		font-size: 0.86rem;
+		font-weight: 800;
+		color: rgba(32, 23, 19, 0.72);
+	}
+
+	:global(.moderation-page .queue-meta) {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	:global(.moderation-page .queue-meta strong) {
+		display: block;
+	}
+
+	:global(.moderation-page .queue-meta span),
+	:global(.moderation-page .queue-meta time) {
+		color: rgba(32, 23, 19, 0.72);
+		font-size: 0.92rem;
+	}
+
+	@media (max-width: 720px) {
+		.moderation-page {
+			width: min(100% - 24px, 980px);
+		}
+
+		:global(.moderation-page .queue-meta),
+		.inbox-header,
+		.inbox-controls {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.status-tabs,
+		.status-tabs button,
+		.post-filter {
+			width: 100%;
+		}
+	}
+</style>

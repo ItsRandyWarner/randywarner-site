@@ -24,6 +24,7 @@ The homepage should encourage visitors to browse writing, learn about the podcas
    - The podcast is The YaS Cast.
    - RSS feed: `https://feeds.transistor.fm/the-yas-cast-yuba-and-sutter-podcast`
    - The homepage should point visitors toward the implemented `/podcasts` hub for the fuller podcast path.
+   - Podcast copy should feel personal and relationship-driven, not like directory or category copy.
 
 3. Future Creative Areas
    - Photos, creative projects, and store can be represented as lightweight paths.
@@ -46,6 +47,7 @@ The homepage should encourage visitors to browse writing, learn about the podcas
    - Podcast title, description, and listening path.
    - Use The YaS Cast artwork in a constrained square treatment so the image supports the section without disrupting the layout.
    - Link visitors to `/podcasts` for Spotify, Apple Podcasts, the fuller show context, and request form access.
+   - A light `/now` callout can sit above the footer as a discovered side-path rather than a full homepage section.
 
 4. Creative Index
    - Small set of paths: photos, projects, shop, and social links.
@@ -96,3 +98,4 @@ The homepage should encourage visitors to browse writing, learn about the podcas
 
 - Ongoing Randy copy pass for the hero, writing cards, podcast section, future-path cards, and return invitation.
 - Final social preview image direction only if Randy wants the share card to use a different visual than the current custom preview artwork.
+- Recent homepage copy changes have pushed the hero, writing section, and podcast copy toward a more personal and less summary-like voice. Keep preserving that direction.

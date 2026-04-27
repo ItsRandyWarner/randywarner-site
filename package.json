@@ -7,11 +7,20 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "sync:comment-slugs": "node scripts/sync-published-writing-slugs.mjs",
+    "prebuild": "npm run sync:comment-slugs",
     "build": "astro build",
+    "pretypecheck": "npm run sync:comment-slugs",
+    "typecheck": "tsc --noEmit",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@netlify/blobs": "^10.7.4",
+    "@netlify/functions": "^5.2.0",
     "astro": "^6.1.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
