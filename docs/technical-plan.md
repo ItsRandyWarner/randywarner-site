@@ -17,6 +17,7 @@ The site is a mostly static Astro application:
 - `/writing` - implemented writing index backed by the writing content collection.
 - `/writing/[slug]` - implemented individual writing route for published posts.
 - `/podcasts` - implemented podcast hub for The YaS Cast, with future room for produced podcasts, future shows, and guest appearances.
+- `/podcasts/the-yas-cast` - implemented dedicated show page with weekly rotating manual starter picks and RSS-powered latest/recent episodes.
 - `/podcasts/request` - implemented shared podcast request form.
 - `/podcasts/request/thanks` - implemented form success page.
 - `/now` - implemented living snapshot page, manually authored and intentionally kept outside primary navigation for now.
@@ -37,7 +38,7 @@ The writing system is implemented. Future changes should preserve the simple dra
 
 When a writing post includes frontmatter `image`, the post page now uses that same image both in the article layout and in Open Graph/Twitter metadata. If no post-level image is present, the shared site social preview image remains the fallback. This keeps a single source of truth for post visuals and avoids a separate social-image field unless a real need appears later.
 
-Podcast content should start as manually curated page content for the `/podcasts` hub. V1 should not fetch or render episode data. Add a podcast content collection or RSS fetching from Transistor later if the page needs multiple shows, repeated episode cards, or current episode data.
+Podcast content starts as manually curated page content for the `/podcasts` hub. V1 does not fetch or render episode data on the hub. The dedicated YaS Cast page is implemented using a manual Start Here pool that rotates 3 visible picks weekly in the browser, plus RSS-powered latest/recent episodes with fallback data. Current RSS data is fetched at build/deploy time, so new episodes appear after the next rebuild. A later release should move public RSS fetching to a server-side endpoint/cache so Transistor feed updates can appear without deploying the site. Item-level RSS artwork is used when present, while older episodes without unique artwork stay text-only. Later Transistor analytics highlights should keep private API keys server-side.
 
 Podcast request forms use Netlify Forms. The current implementation has a dedicated `/podcasts/request` page linked from `/podcasts`, with request-type-specific fields shown conditionally. All possible fields remain in the static form markup so Netlify can detect and accept submissions.
 

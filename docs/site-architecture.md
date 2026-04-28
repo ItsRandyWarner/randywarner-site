@@ -9,6 +9,7 @@ Implemented:
 - `/writing` - writing index backed by Astro content collections.
 - `/writing/[slug]` - implemented individual writing route for published posts.
 - `/podcasts` - podcast hub led by The YaS Cast.
+- `/podcasts/the-yas-cast` - dedicated YaS Cast show page with weekly rotating manual starter picks and RSS-powered recent episodes.
 - `/podcasts/request` - shared podcast request form for guest suggestions, topic suggestions, and guest requests.
 - `/podcasts/request/thanks` - form success page.
 - `/comments/moderate` - private comment moderation surface implemented in code for internal use.
@@ -65,11 +66,13 @@ This page can eventually include:
 - Additional podcasts Randy starts.
 - Episodes where Randy appears as a guest.
 
-V1 shows The YaS Cast, Spotify and Apple Podcasts links, podcast artwork, and a path to the podcast request form. Future podcast categories should remain invisible until there is real content.
+V1 shows The YaS Cast, Spotify and Apple Podcasts links, podcast artwork, a path to the dedicated show page, and a path to the podcast request form. Future podcast categories should remain invisible until there is real content.
 
 No required page-structure questions remain for v1.
 
-Recommendation: keep `/podcasts` manually curated for now. Add RSS fetching only when the page needs current episode data.
+Recommendation: keep `/podcasts` manually curated for now. The dedicated YaS Cast page currently fetches RSS at build/deploy time. If episode freshness becomes annoying to manage manually, move RSS fetching to a server-side endpoint/cache so the show page can update from Transistor without requiring a deploy.
+
+Dedicated show-page direction is documented in `docs/the-yas-cast-page-plan.md`.
 
 ### `/podcasts/request`
 

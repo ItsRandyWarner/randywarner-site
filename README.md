@@ -9,6 +9,7 @@ Astro site scaffold for the next version of the Randy Warner website.
 - [Components](docs/components.md)
 - [Writing system](docs/writing-system.md)
 - [Podcast page](docs/podcast-page.md)
+- [The YaS Cast page plan](docs/the-yas-cast-page-plan.md)
 - [Homepage v1 brief](docs/homepage-v1-brief.md)
 - [Project brief](docs/project-brief.md)
 - [Technical plan](docs/technical-plan.md)

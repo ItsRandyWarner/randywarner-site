@@ -96,12 +96,14 @@ Do not show future podcast categories as placeholder sections in v1.
 Possible future routes:
 
 - `/podcasts` - hub for all podcast/audio work.
-- `/podcasts/the-yas-cast` - dedicated show page if the hub gets crowded.
+- `/podcasts/the-yas-cast` - dedicated show page for The YaS Cast, implemented with weekly rotating manual starter picks and RSS-powered recent episodes.
 - `/podcasts/the-yas-cast/[episode]` - episode pages if show notes, transcripts, images, links, or related writing become useful.
 - `/podcasts/request` - guest/topic/request form.
 - `/podcasts/guest-appearances` - optional later, only if there are enough appearances to justify it.
 
 Do not build these routes until the content volume asks for them.
+
+See `docs/the-yas-cast-page-plan.md` for the dedicated show-page direction, including weekly rotating manual starter picks, RSS-powered recent episodes, optional episode artwork from the feed, and possible Transistor analytics highlights.
 
 Future podcast categories can include:
 
@@ -152,9 +154,12 @@ The YaS Cast RSS feed:
 
 Recommendation:
 
-- Use manual links/content for v1.
-- Add RSS fetching later if the page needs current recent episodes automatically.
-- Avoid depending on RSS for the first useful version unless showing recent episodes becomes the core purpose.
+- Keep `/podcasts` itself manually curated.
+- Use RSS on the dedicated YaS Cast page for latest/recent episodes.
+- Current implementation fetches RSS at build/deploy time, so new episodes appear after the next site rebuild.
+- Plan a later release that fetches RSS dynamically through a server-side endpoint/cache so Transistor feed updates can appear without a deploy.
+- Pull item-level episode artwork from RSS when available; older episodes can remain text-only.
+- Keep starter episodes editorial, with the visible 3 rotating weekly in the browser from a manual pool.
 
 ## Form Direction
 

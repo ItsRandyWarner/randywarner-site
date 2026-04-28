@@ -10,9 +10,6 @@ topics:
 draft: false
 featured: false
 slug: single-ply-ftw
-image:
-  src: "/writing/single-ply-feature.png"
-  alt: "A playful collage illustration of a roll of single-ply toilet paper on a pedestal."
 ---
 
 I literally feel like I'm the only one who thinks this, but Scott's single ply TP is far superior than any of that 2-ply garbage.
