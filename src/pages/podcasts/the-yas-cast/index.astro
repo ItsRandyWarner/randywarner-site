@@ -57,11 +57,11 @@ const formatEpisodeDate = (value: string) =>
 		{
 			latestEpisode && (
 				<section class="latest-panel" aria-labelledby="latest-title">
-					<div>
+					<div class="latest-heading">
 						<p class="eyebrow">Latest Episode</p>
 						<h2 id="latest-title">{latestEpisode.title}</h2>
 					</div>
-					<div class="episode-copy">
+					<div class="latest-content">
 						{
 							latestEpisode.image && (
 								<img
@@ -73,18 +73,20 @@ const formatEpisodeDate = (value: string) =>
 								/>
 							)
 						}
-						<p class="episode-meta">
-							{latestEpisode.episodeNumber && <>Episode {latestEpisode.episodeNumber} · </>}
-							{formatEpisodeDate(latestEpisode.publishedAt)}
-							{latestEpisode.duration && <> · {latestEpisode.duration}</>}
-						</p>
-						<p>
-							{latestEpisode.description ||
-								"Fresh from the feed. Press play, meet the person, and see where the conversation goes."}
-						</p>
-						<a class="text-link" href={latestEpisode.url} target="_blank" rel="noreferrer">
-							Listen to this episode
-						</a>
+						<div class="episode-copy">
+							<p class="episode-meta">
+								{latestEpisode.episodeNumber && <>Episode {latestEpisode.episodeNumber} · </>}
+								{formatEpisodeDate(latestEpisode.publishedAt)}
+								{latestEpisode.duration && <> · {latestEpisode.duration}</>}
+							</p>
+							<p>
+								{latestEpisode.description ||
+									"Fresh from the feed. Press play, meet the person, and see where the conversation goes."}
+							</p>
+							<a class="text-link" href={latestEpisode.url} target="_blank" rel="noreferrer">
+								Listen to this episode
+							</a>
+						</div>
 					</div>
 				</section>
 			)
@@ -359,7 +361,6 @@ const formatEpisodeDate = (value: string) =>
 		padding: 9px 14px;
 	}
 
-	.latest-panel,
 	.request-panel {
 		display: grid;
 		grid-template-columns: minmax(0, 0.86fr) minmax(280px, 1fr);
@@ -372,6 +373,25 @@ const formatEpisodeDate = (value: string) =>
 			linear-gradient(135deg, rgba(242, 189, 52, 0.16), rgba(31, 111, 139, 0.08)),
 			rgba(255, 255, 255, 0.62);
 		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.1);
+	}
+
+	.latest-panel {
+		display: grid;
+		gap: clamp(20px, 3vw, 30px);
+		margin-top: clamp(34px, 6vw, 72px);
+		padding: clamp(24px, 4vw, 38px);
+		border: 2px solid var(--ink);
+		background:
+			linear-gradient(135deg, rgba(242, 189, 52, 0.16), rgba(31, 111, 139, 0.08)),
+			rgba(255, 255, 255, 0.62);
+		box-shadow: 8px 8px 0 rgba(32, 23, 19, 0.1);
+	}
+
+	.latest-content {
+		display: grid;
+		grid-template-columns: minmax(180px, 220px) minmax(0, 1fr);
+		gap: clamp(18px, 4vw, 36px);
+		align-items: start;
 	}
 
 	.episode-copy p,
@@ -449,7 +469,6 @@ const formatEpisodeDate = (value: string) =>
 	.latest-artwork {
 		width: min(100%, 220px);
 		height: auto;
-		margin-bottom: 18px;
 		box-shadow: 6px 6px 0 rgba(32, 23, 19, 0.1);
 	}
 
@@ -512,7 +531,6 @@ const formatEpisodeDate = (value: string) =>
 
 	@media (max-width: 860px) {
 		.show-hero,
-		.latest-panel,
 		.request-panel {
 			grid-template-columns: 1fr;
 		}
@@ -552,6 +570,10 @@ const formatEpisodeDate = (value: string) =>
 		.latest-panel,
 		.request-panel {
 			padding: 18px;
+		}
+
+		.latest-content {
+			grid-template-columns: 1fr;
 		}
 
 		.episode-row {
