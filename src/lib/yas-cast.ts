@@ -150,17 +150,36 @@ export const fallbackEpisodes: PodcastEpisode[] = [
 	},
 ];
 
-export async function getYasCastEpisodes() {
-	try {
-		const response = await fetch(feedUrl);
-		if (!response.ok) throw new Error(`RSS fetch failed with ${response.status}`);
+type EpisodeFetchOptions = {
+	fallbackOnError?: boolean;
+};
 
-		const xml = await response.text();
-		const episodes = parseEpisodeRss(xml);
-		return episodes.length ? episodes : fallbackEpisodes;
-	} catch (_error) {
+export async function getYasCastEpisodes({ fallbackOnError = import.meta.env.DEV }: EpisodeFetchOptions = {}) {
+	try {
+		return await fetchYasCastEpisodes();
+	} catch (error) {
+		if (!fallbackOnError) throw error;
+		console.warn(`Using fallback YaS Cast episodes: ${error instanceof Error ? error.message : String(error)}`);
 		return fallbackEpisodes;
 	}
+}
+
+export async function fetchYasCastEpisodes() {
+	const xml = await fetchYasCastFeed();
+	const episodes = parseEpisodeRss(xml);
+
+	if (!episodes.length) {
+		throw new Error("No episodes found in YaS Cast RSS feed");
+	}
+
+	return episodes;
+}
+
+export async function fetchYasCastFeed() {
+	const response = await fetch(feedUrl);
+	if (!response.ok) throw new Error(`RSS fetch failed with ${response.status}`);
+
+	return response.text();
 }
 
 export function starterEpisodeCards(episodes: PodcastEpisode[]) {
