@@ -13,6 +13,11 @@ Consequences:
 
 ## Decisions
 
+Date: 2026-06-03
+Decision: Automate YaS Cast RSS refresh with a Netlify build hook.
+Context: The dedicated YaS Cast page fetches the Transistor RSS feed during the Astro build. Manual rebuilds worked, but Randy wanted new episodes to show without asking for a deploy each time.
+Consequences: A Netlify build hook named `Podcast RSS rebuild` was created for the `main` branch: `https://api.netlify.com/build_hooks/6a206b3645c23c1a76dfd83c`. Zapier still needs to be configured with `Transistor.fm -> Episode Published` as the trigger and `Webhooks by Zapier -> Custom Request` as the action, using method `POST`, the hook URL, and `{}` as the body. Production builds now fail visibly if the RSS feed cannot be fetched or parsed, so stale fallback data is not silently published. Dynamic RSS fetching through a server-side endpoint/cache remains the likely later upgrade.
+
 Date: 2026-04-19
 Decision: Homepage v1 will use a warm, ordered, colorful, personal visual direction.
 Context: Randy liked the recommendation to start from Eames/Girard order and warmth, add a little Corita Kent color and typographic spirit, and use only a small dash of David Carson looseness.

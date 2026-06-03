@@ -157,6 +157,11 @@ Recommendation:
 - Keep `/podcasts` itself manually curated.
 - Use RSS on the dedicated YaS Cast page for latest/recent episodes.
 - Current implementation fetches RSS at build/deploy time, so new episodes appear after the next site rebuild.
+- A Netlify build hook named `Podcast RSS rebuild` has been created for automatic rebuilds after new episode publishes:
+  `https://api.netlify.com/build_hooks/6a206b3645c23c1a76dfd83c`
+- Planned automation: use Zapier with `Transistor.fm -> Episode Published` as the trigger and `Webhooks by Zapier -> Custom Request` as the action. Send a `POST` request to the Netlify build hook URL with an empty `{}` body.
+- Keep the build hook URL out of public-facing pages; anyone with it can trigger a site rebuild.
+- Production builds now fail visibly if the RSS feed cannot be fetched or parsed, instead of silently publishing stale fallback episodes. Local development can still use fallback data.
 - Plan a later release that fetches RSS dynamically through a server-side endpoint/cache so Transistor feed updates can appear without a deploy.
 - Pull item-level episode artwork from RSS when available; older episodes can remain text-only.
 - Keep starter episodes editorial, with the visible 3 rotating weekly in the browser from a manual pool.

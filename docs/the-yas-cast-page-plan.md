@@ -251,6 +251,7 @@ Security rule:
 Recommended approach:
 
 - Use build-time fetching for public RSS data in the current release.
+- Use the Netlify build hook plus Zapier to trigger a rebuild when Transistor publishes a new episode.
 - Move public RSS fetching to a small server-side endpoint/cache in a later release so the page can refresh after Transistor updates without requiring a deploy.
 - Use a Netlify Function or scheduled/build-time script for private analytics.
 - Cache analytics output into a small generated file if the page can tolerate stale data.
@@ -265,8 +266,29 @@ First practical version:
 
 1. Fetch RSS at build time.
 2. Render Latest Episode and Recent Conversations.
-3. Keep Start Here editorial, with client-side weekly rotation from the curated pool.
-4. Leave Popular With Listeners manual or hidden until Transistor API details are confirmed.
+3. Trigger rebuilds automatically from Transistor publishes through Zapier and the Netlify build hook.
+4. Keep Start Here editorial, with client-side weekly rotation from the curated pool.
+5. Leave Popular With Listeners manual or hidden until Transistor API details are confirmed.
+
+Current build hook:
+
+```text
+https://api.netlify.com/build_hooks/6a206b3645c23c1a76dfd83c
+```
+
+Zapier setup:
+
+1. Trigger: `Transistor.fm -> Episode Published`.
+2. Action: `Webhooks by Zapier -> Custom Request`.
+3. Method: `POST`.
+4. URL: the Netlify build hook above.
+5. Body: `{}`.
+
+Operational notes:
+
+- Keep the hook URL out of public pages; anyone with it can trigger a rebuild.
+- Production builds should fail if the RSS fetch or parse fails, so stale fallback data does not get published silently.
+- Local development may still use fallback episodes when the feed cannot be reached.
 
 Second practical version:
 
@@ -383,7 +405,7 @@ Definition of done:
 
 ### Build 2: RSS-Powered Latest And Recent Episodes
 
-Status: implemented with fallback data.
+Status: implemented with build-hook automation ready.
 
 Scope:
 
@@ -391,14 +413,15 @@ Scope:
 - render Latest Episode
 - render Recent Conversations
 - pull item-level episode artwork when the RSS feed includes it
-- keep page working if RSS fetch fails by using fallback data
+- trigger Netlify rebuilds from new Transistor publishes via Zapier and the `Podcast RSS rebuild` build hook
+- fail production builds if RSS fetch or parsing fails, while keeping local fallback data for development
 
 Definition of done:
 
-- the page updates when new episodes publish
+- the page updates when new episodes publish and the Zapier hook fires
 - unique episode artwork appears for newer episodes that include it
 - older episodes without unique artwork stay text-only
-- build does not fail permanently because of a temporary RSS issue
+- production builds fail visibly if RSS is unavailable, so stale data is not published silently
 
 ### Build 3: Dynamic RSS Refresh
 
